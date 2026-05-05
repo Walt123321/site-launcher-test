@@ -1615,8 +1615,13 @@ elif st.session_state.step == 2:
                 # -------------------------
                 from core.keitaro import create_multiple_projects
 
+                log_messages = []
+
                 def live_log(txt):
-                    status_box.info(txt)
+                    print(txt)
+                    log_messages.append(txt)
+    
+
 
                 status_box.info("🟡 Запускаю Keitaro...")
 
@@ -1627,6 +1632,10 @@ elif st.session_state.step == 2:
                     max_workers=min(5, total)
                 )
 
+                if log_messages:
+                    st.text_area("Logs", "\n".join(log_messages), height=250)
+
+                    
                 errors = [r for r in results if r.get("error")]
 
                 progress.progress(1.0)
