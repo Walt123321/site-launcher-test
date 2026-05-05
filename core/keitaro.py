@@ -2,8 +2,8 @@ import requests
 import urllib3
 import base64
 import time
-import re
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 urllib3.disable_warnings()
 import streamlit as st
@@ -14,10 +14,14 @@ import streamlit as st
 # =====================================================
 
 API_KEY = st.secrets["KEITARO_API_KEY"]
-BASE_URL = st.secrets["KEITARO_BASE_URL"]
+BASE_URL = st.secrets["KEITARO_BASE_URL"].rstrip("/")
+
 TIMEOUT = 120
+
 CAMPAIGN_GROUP_ID = 2
 OFFER_GROUP_ID = 3
+DOMAIN_GROUP_ID = 2
+
 HEADERS = {
     "Api-Key": API_KEY,
     "Content-Type": "application/json"
@@ -25,17 +29,18 @@ HEADERS = {
 
 
 # =====================================================
-# HELPERS
+# CONFIG OVERRIDE
 # =====================================================
 
 def set_config(
     api_key: str,
     base_url: str,
-    campaign_group_id: int = 1,
-    offer_group_id: int = 1
+    campaign_group_id: int = 2,
+    offer_group_id: int = 3,
+    domain_group_id: int = 2
 ):
     global API_KEY, BASE_URL
-    global CAMPAIGN_GROUP_ID, OFFER_GROUP_ID
+    global CAMPAIGN_GROUP_ID, OFFER_GROUP_ID, DOMAIN_GROUP_ID
     global HEADERS
 
     API_KEY = api_key
@@ -43,11 +48,17 @@ def set_config(
 
     CAMPAIGN_GROUP_ID = campaign_group_id
     OFFER_GROUP_ID = offer_group_id
+    DOMAIN_GROUP_ID = domain_group_id
 
     HEADERS = {
         "Api-Key": API_KEY,
         "Content-Type": "application/json"
     }
+
+
+# =====================================================
+# HTTP HELPERS
+# =====================================================
 
 def post(url, payload):
     return requests.post(
@@ -79,7 +90,7 @@ def put(url, payload):
 
 
 # =====================================================
-# STEP 1 — OFFER
+# OFFER
 # =====================================================
 
 def create_offer(domain: str, zip_path: str):
@@ -108,7 +119,7 @@ def create_offer(domain: str, zip_path: str):
 
 
 # =====================================================
-# STEP 2 — CAMPAIGN
+# CAMPAIGN
 # =====================================================
 
 def create_campaign(domain: str):
@@ -129,7 +140,7 @@ def create_campaign(domain: str):
 
 
 # =====================================================
-# STEP 3 — FLOW
+# FLOW
 # =====================================================
 
 def create_flow(domain: str, campaign_id: int, offer_id: int):
@@ -160,54 +171,44 @@ def create_flow(domain: str, campaign_id: int, offer_id: int):
 
 
 # =====================================================
-# STEP 4 — WAIT DOMAIN
+# DOMAIN CREATE
 # =====================================================
 
-def wait_domain(domain: str):
-    while True:
-        r = get(f"{BASE_URL}/domains")
-
-        if r.status_code != 200:
-            raise Exception(r.text)
-
-        items = r.json()
-
-        for item in items:
-            if item["name"].lower() == domain.lower():
-                return item["id"]
-
-        time.sleep(60)
-
-
-# =====================================================
-# STEP 5 — ATTACH CAMPAIGN
-# =====================================================
-
-def attach_campaign(domain_id: int, campaign_id: int):
+def create_domain(domain: str, campaign_id: int):
     payload = {
-        "default_campaign_id": campaign_id
+        "name": domain,
+        "group_id": DOMAIN_GROUP_ID,
+        "default_campaign_id": campaign_id,
+        "allow_indexing": True,
+        "admin_dashboard": False,
+        "ssl_redirect": True,
+        "catch_not_found": False
     }
 
-    r = put(f"{BASE_URL}/domains/{domain_id}", payload)
+    r = post(f"{BASE_URL}/domains", payload)
 
     if r.status_code != 200:
         raise Exception(r.text)
 
+    data = r.json()
+
+    if isinstance(data, list):
+        return data[0]["id"]
+
+    return data["id"]
+
 
 # =====================================================
-# STEP 6 — HTTPS CHECK
+# HTTPS CHECK LOOP
 # =====================================================
 
 def check_https(domain: str, callback=None):
-    import requests
-    import time
-
     url = f"https://{domain}"
 
     while True:
         try:
             if callback:
-                callback(f"⏳ Перевіряю HTTPS: {domain}")
+                callback(f"🌐 HTTPS check: {domain}")
 
             r = requests.get(
                 url,
@@ -225,46 +226,43 @@ def check_https(domain: str, callback=None):
 
                 return True, breadcrumb
 
-        except Exception as e:
-            if callback:
-                callback("🌐 DNS / SSL ще не готовий. Чекаю 1 хвилину...")
+        except:
+            pass
+
+        if callback:
+            callback(f"⏳ {domain} ще не готовий. Чекаю 1 хвилину...")
 
         time.sleep(60)
 
 
 # =====================================================
-# MAIN PROCESS
+# SINGLE DOMAIN FULL PROCESS
 # =====================================================
 
 def create_full_project(domain: str, zip_path: str, callback=None):
-    """
-    callback(text) -> streamlit status update
-    """
 
     def log(text):
         print(text)
         if callback:
             callback(text)
 
-    log("Створення офера...")
+    log(f"🚀 {domain}: створення offer")
     offer_id = create_offer(domain, zip_path)
 
-    log("Створення кампанії...")
+    log(f"🚀 {domain}: створення campaign")
     campaign_id = create_campaign(domain)
 
-    log("Створення flow...")
+    log(f"🚀 {domain}: створення flow")
     flow_id = create_flow(domain, campaign_id, offer_id)
 
-    log("Очікування домену...")
-    domain_id = wait_domain(domain)
+    log(f"🚀 {domain}: створення domain")
+    domain_id = create_domain(domain, campaign_id)
 
-    log("Прив'язка кампанії...")
-    attach_campaign(domain_id, campaign_id)
-
-    log("HTTPS перевірка...")
-    https_ok, breadcrumb_ok = check_https(domain)
+    log(f"🚀 {domain}: очікування HTTPS")
+    https_ok, breadcrumb_ok = check_https(domain, callback)
 
     return {
+        "domain": domain,
         "offer_id": offer_id,
         "campaign_id": campaign_id,
         "flow_id": flow_id,
@@ -272,3 +270,38 @@ def create_full_project(domain: str, zip_path: str, callback=None):
         "https": https_ok,
         "breadcrumb": breadcrumb_ok
     }
+
+
+# =====================================================
+# MULTI DOMAIN PARALLEL
+# =====================================================
+
+def create_multiple_projects(domains, zip_path, callback=None, max_workers=5):
+    results = []
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+
+        futures = {
+            executor.submit(
+                create_full_project,
+                domain,
+                zip_path,
+                callback
+            ): domain
+            for domain in domains
+        }
+
+        for future in as_completed(futures):
+            domain = futures[future]
+
+            try:
+                result = future.result()
+                results.append(result)
+
+            except Exception as e:
+                results.append({
+                    "domain": domain,
+                    "error": str(e)
+                })
+
+    return results
