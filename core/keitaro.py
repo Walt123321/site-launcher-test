@@ -69,32 +69,44 @@ def post(url, payload):
 # OFFER
 # =====================================================
 
-def create_offer(domain: str, zip_bytes: bytes, callback=None):
-    if callback:
-        callback(f"📦 {domain}: upload ZIP ({round(len(zip_bytes)/1024,1)} KB)")
+def create_offer(domain, zip_bytes):
+    url = f"{BASE_URL}/offers"
 
-    archive_b64 = base64.b64encode(zip_bytes).decode()
-
-    payload = {
+    data = {
         "name": domain,
         "group_id": OFFER_GROUP_ID,
         "offer_type": "local",
-        "state": "active",
-        "archive": archive_b64
+        "state": "active"
     }
 
-    r = post(f"{BASE_URL}/offers", payload)
+    files = {
+        "archive": (
+            f"{domain}.zip",
+            zip_bytes,
+            "application/zip"
+        )
+    }
 
-    if r.status_code != 200:
-        raise Exception(f"Offer error {r.status_code}: {r.text}")
+    headers = {
+        "Api-Key": API_KEY
+    }
 
-    data = r.json()
+    r = requests.post(
+        url,
+        headers=headers,
+        data=data,
+        files=files,
+        timeout=TIMEOUT,
+        verify=False
+    )
 
-    if callback:
-        callback(f"✅ {domain}: offer created #{data['id']}")
+    print("STATUS:", r.status_code)
+    print("TEXT:", r.text)
 
-    return data["id"]
+    if r.status_code not in [200, 201]:
+        raise Exception(r.text)
 
+    return r.json()["id"]
 
 # =====================================================
 # CAMPAIGN
