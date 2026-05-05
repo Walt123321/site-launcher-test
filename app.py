@@ -1539,7 +1539,7 @@ elif st.session_state.step == 2:
             result_box = st.container()
 
             try:
-                zip_path = "test.com.zip"
+                zip_map = st.session_state["generated_site_zips"]
 
                 done_counter = {"count": 0}
 
@@ -1561,7 +1561,7 @@ elif st.session_state.step == 2:
                 with st.spinner("🚀 Виконується паралельний запуск..."):
                     results = create_multiple_projects(
                         domains=domains,
-                        zip_path=zip_path,
+                        zip_map=zip_map,
                         callback=print,
                         max_workers=5
                     )
