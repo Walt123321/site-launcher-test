@@ -12,6 +12,7 @@ import zipfile
 from pathlib import Path
 from typing import Optional
 from core.review_pipeline import generate_review
+from core.keitaro import create_project
 
 
 
@@ -1528,8 +1529,6 @@ elif st.session_state.step == 2:
         
         
         if st.session_state.get("run_generation"):
-        
-            from keitaro import create_project
         
             status_box = st.empty()
         
