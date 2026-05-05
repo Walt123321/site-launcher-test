@@ -86,7 +86,7 @@ def create_offer(domain: str, zip_path: str):
         raise Exception(f"ZIP not found: {zip_path}")
 
     with open(zip_file, "rb") as f:
-        archive_b64 = base64.b64encode(f.read()).decode()
+        archive_b64 = base64.b64encode(zip_bytes).decode()
 
     payload = {
         "name": domain,
