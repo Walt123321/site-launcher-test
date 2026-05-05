@@ -1531,7 +1531,7 @@ elif st.session_state.step == 2:
 
         if st.session_state.get("run_generation"):
         
-            domains = st.session_state.chosen_domains
+            domains = [d.strip().lower() for d in st.session_state.chosen_domains]
             total = len(domains)
         
             progress = st.progress(0)
