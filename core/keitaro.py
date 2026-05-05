@@ -65,20 +65,14 @@ def post(url, payload):
     )
 
 
-def get(url):
-    return requests.get(
-        url,
-        headers=HEADERS,
-        timeout=TIMEOUT,
-        verify=False
-    )
-
-
 # =====================================================
 # OFFER
 # =====================================================
 
-def create_offer(domain: str, zip_bytes):
+def create_offer(domain: str, zip_bytes: bytes, callback=None):
+    if callback:
+        callback(f"📦 {domain}: upload ZIP ({round(len(zip_bytes)/1024,1)} KB)")
+
     archive_b64 = base64.b64encode(zip_bytes).decode()
 
     payload = {
@@ -92,16 +86,21 @@ def create_offer(domain: str, zip_bytes):
     r = post(f"{BASE_URL}/offers", payload)
 
     if r.status_code != 200:
-        raise Exception(r.text)
+        raise Exception(f"Offer error {r.status_code}: {r.text}")
 
-    return r.json()["id"]
+    data = r.json()
+
+    if callback:
+        callback(f"✅ {domain}: offer created #{data['id']}")
+
+    return data["id"]
 
 
 # =====================================================
 # CAMPAIGN
 # =====================================================
 
-def create_campaign(domain: str):
+def create_campaign(domain: str, callback=None):
     payload = {
         "name": domain,
         "alias": domain,
@@ -113,16 +112,21 @@ def create_campaign(domain: str):
     r = post(f"{BASE_URL}/campaigns", payload)
 
     if r.status_code != 200:
-        raise Exception(r.text)
+        raise Exception(f"Campaign error {r.status_code}: {r.text}")
 
-    return r.json()["id"]
+    data = r.json()
+
+    if callback:
+        callback(f"✅ {domain}: campaign #{data['id']}")
+
+    return data["id"]
 
 
 # =====================================================
 # FLOW
 # =====================================================
 
-def create_flow(domain: str, campaign_id: int, offer_id: int):
+def create_flow(domain: str, campaign_id: int, offer_id: int, callback=None):
     payload = {
         "campaign_id": campaign_id,
         "type": "forced",
@@ -144,16 +148,21 @@ def create_flow(domain: str, campaign_id: int, offer_id: int):
     r = post(f"{BASE_URL}/streams", payload)
 
     if r.status_code != 200:
-        raise Exception(r.text)
+        raise Exception(f"Flow error {r.status_code}: {r.text}")
 
-    return r.json()["id"]
+    data = r.json()
+
+    if callback:
+        callback(f"✅ {domain}: flow #{data['id']}")
+
+    return data["id"]
 
 
 # =====================================================
 # DOMAIN
 # =====================================================
 
-def create_domain(domain: str, campaign_id: int):
+def create_domain(domain: str, campaign_id: int, callback=None):
     payload = {
         "name": domain,
         "default_campaign_id": campaign_id,
@@ -168,31 +177,36 @@ def create_domain(domain: str, campaign_id: int):
     r = post(f"{BASE_URL}/domains", payload)
 
     if r.status_code != 200:
-        raise Exception(r.text)
+        raise Exception(f"Domain error {r.status_code}: {r.text}")
 
     data = r.json()
 
     if isinstance(data, list):
-        return data[0]["id"]
+        domain_id = data[0]["id"]
+    else:
+        domain_id = data["id"]
 
-    return data["id"]
+    if callback:
+        callback(f"✅ {domain}: domain #{domain_id}")
+
+    return domain_id
 
 
 # =====================================================
 # HTTPS CHECK
 # =====================================================
 
-def check_https(domain: str, callback=None):
+def check_https(domain: str, callback=None, max_checks=20):
     url = f"https://{domain}"
 
-    while True:
+    for _ in range(max_checks):
         try:
             if callback:
-                callback(f"🌐 {domain}: перевірка HTTPS...")
+                callback(f"🌐 {domain}: HTTPS check...")
 
             r = requests.get(
                 url,
-                timeout=30,
+                timeout=20,
                 verify=False
             )
 
@@ -204,39 +218,38 @@ def check_https(domain: str, callback=None):
                     and "application/ld+json" in html
                 )
 
+                if callback:
+                    callback(f"✅ {domain}: HTTPS OK")
+
                 return True, breadcrumb
 
         except:
             pass
 
         if callback:
-            callback(f"⏳ {domain}: DNS / SSL ще не готовий. Чекаю 1 хв...")
+            callback(f"⏳ {domain}: waiting DNS/SSL...")
 
-        time.sleep(60)
+        time.sleep(30)
+
+    if callback:
+        callback(f"⚠️ {domain}: HTTPS timeout")
+
+    return False, False
 
 
 # =====================================================
-# STAGE 1
+# CREATE FULL PROJECT
 # =====================================================
 
-def prepare_project(domain: str, zip_bytes, callback=None):
+def prepare_project(domain: str, zip_bytes: bytes, callback=None):
 
-    def log(msg):
-        print(msg)
-        if callback:
-            callback(msg)
+    if callback:
+        callback(f"🚀 {domain}: START")
 
-    log(f"🚀 {domain}: створення offer")
-    offer_id = create_offer(domain, zip_bytes)
-
-    log(f"🚀 {domain}: створення campaign")
-    campaign_id = create_campaign(domain)
-
-    log(f"🚀 {domain}: створення flow")
-    flow_id = create_flow(domain, campaign_id, offer_id)
-
-    log(f"🚀 {domain}: створення domain")
-    domain_id = create_domain(domain, campaign_id)
+    offer_id = create_offer(domain, zip_bytes, callback)
+    campaign_id = create_campaign(domain, callback)
+    flow_id = create_flow(domain, campaign_id, offer_id, callback)
+    domain_id = create_domain(domain, campaign_id, callback)
 
     return {
         "domain": domain,
@@ -246,10 +259,6 @@ def prepare_project(domain: str, zip_bytes, callback=None):
         "domain_id": domain_id
     }
 
-
-# =====================================================
-# STAGE 2
-# =====================================================
 
 def finalize_project(project: dict, callback=None):
     domain = project["domain"]
@@ -262,18 +271,14 @@ def finalize_project(project: dict, callback=None):
     return project
 
 
-# =====================================================
-# SINGLE
-# =====================================================
-
-def create_full_project(domain: str, zip_bytes, callback=None):
+def create_full_project(domain: str, zip_bytes: bytes, callback=None):
     project = prepare_project(domain, zip_bytes, callback)
     project = finalize_project(project, callback)
     return project
 
 
 # =====================================================
-# MULTI
+# MULTI PROJECTS
 # =====================================================
 
 def create_multiple_projects(domains, zip_map, callback=None, max_workers=5):
@@ -282,18 +287,31 @@ def create_multiple_projects(domains, zip_map, callback=None, max_workers=5):
     final_results = []
 
     if callback:
-        callback("🚀 Stage 1: створення всіх проектів...")
+        callback("🚀 Stage 1: creating projects...")
 
+    # -------------------------
+    # STAGE 1
+    # -------------------------
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = {
-            executor.submit(
-                prepare_project,
-                domain,
-                zip_map[domain],
-                callback
-            ): domain
-            for domain in domains
-        }
+
+        futures = {}
+
+        for domain in domains:
+            if domain not in zip_map:
+                final_results.append({
+                    "domain": domain,
+                    "error": "ZIP not found in zip_map"
+                })
+                continue
+
+            futures[
+                executor.submit(
+                    prepare_project,
+                    domain,
+                    zip_map[domain],
+                    callback
+                )
+            ] = domain
 
         for future in as_completed(futures):
             domain = futures[future]
@@ -308,10 +326,14 @@ def create_multiple_projects(domains, zip_map, callback=None, max_workers=5):
                     "error": str(e)
                 })
 
+    # -------------------------
+    # STAGE 2
+    # -------------------------
     if callback:
-        callback("🌐 Stage 2: очікування SSL / DNS...")
+        callback("🌐 Stage 2: waiting HTTPS...")
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
+
         futures = {
             executor.submit(
                 finalize_project,
