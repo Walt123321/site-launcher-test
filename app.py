@@ -1627,8 +1627,14 @@ elif st.session_state.step == 2:
                     max_workers=min(5, total)
                 )
 
+                errors = [r for r in results if r.get("error")]
+
                 progress.progress(1.0)
-                status_box.success("✅ Усі сайти створені!")
+
+                if errors:
+                    status_box.error(f"❌ Є помилки: {len(errors)}")
+                else:
+                    status_box.success("✅ Усі сайти створені!")
 
                 with result_box:
                     for row in results:
