@@ -79,7 +79,7 @@ def get(url):
 # OFFER
 # =====================================================
 
-def create_offer(domain: str, zip_path: str):
+def create_offer(domain: str, zip_bytes):
     zip_file = Path(zip_path)
 
     if not zip_file.exists():
@@ -226,7 +226,7 @@ def check_https(domain: str, callback=None):
 # STAGE 1 (FAST)
 # =====================================================
 
-def prepare_project(domain: str, zip_path: str, callback=None):
+def prepare_project(domain: str, zip_bytes, callback=None):
 
     def log(msg):
         print(msg)
@@ -273,7 +273,7 @@ def finalize_project(project: dict, callback=None):
 # SINGLE DOMAIN
 # =====================================================
 
-def create_full_project(domain: str, zip_path: str, callback=None):
+def create_full_project(domain: str, zip_bytes, callback=None):
     project = prepare_project(domain, zip_path, callback)
     project = finalize_project(project, callback)
     return project
