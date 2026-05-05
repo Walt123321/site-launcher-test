@@ -1520,39 +1520,63 @@ elif st.session_state.step == 2:
 
         st.markdown("---")
 
+        st.markdown("---")
+        
         if st.button(
             "🚀 СТВОРИТИ І ДОДАТИ В KEITARO",
             use_container_width=True,
-            type="primary"
+            type="primary",
+            disabled=(len(st.session_state.chosen_domains) != int(st.session_state.sites_count))
         ):
             st.session_state.run_generation = True
         
         
         if st.session_state.get("run_generation"):
         
+            domains = st.session_state.chosen_domains
+            total = len(domains)
+        
+            progress = st.progress(0)
             status_box = st.empty()
+            result_box = st.container()
         
             try:
-                status_box.info("🟡 Генеруємо сайт...")
+                all_results = []
         
-                # тестова зіпка
-                zip_path = "test.com.zip"
+                for i, domain in enumerate(domains, start=1):
         
-                domain = st.session_state.chosen_domains[0]   # перший вибраний домен
+                    status_box.info(f"🟡 [{i}/{total}] Генеруємо сайт: {domain}")
         
-                status_box.info("🟡 Додаємо в Keitaro...")
+                    # ПОКИ тестовий zip
+                    zip_path = "test.com.zip"
         
-                result = create_full_project(
-                    domain=domain,
-                    zip_path=zip_path
-                )
+                    status_box.info(f"🟡 [{i}/{total}] Додаємо в Keitaro: {domain}")
         
-                status_box.success(f"✅ Готово: {domain}")
+                    result = create_full_project(
+                        domain=domain,
+                        zip_path=zip_path,
+                        callback=lambda txt: status_box.info(f"🟡 [{i}/{total}] {txt}")
+                    )
         
-                st.json(result)
+                    all_results.append({
+                        "domain": domain,
+                        "result": result
+                    })
+        
+                    progress.progress(i / total)
+        
+                status_box.success("✅ Усі сайти створені!")
+        
+                with result_box:
+                    for row in all_results:
+                        st.markdown(f"### 🌐 {row['domain']}")
+                        st.json(row["result"])
+        
+                st.session_state.run_generation = False
         
             except Exception as e:
                 status_box.error(f"❌ Помилка: {str(e)}")
+                st.session_state.run_generation = False
 
 
 
