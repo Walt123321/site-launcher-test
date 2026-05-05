@@ -1520,7 +1520,7 @@ elif st.session_state.step == 2:
 
         st.markdown("---")
 
-       if st.button(
+        if st.button(
             "🚀 СТВОРИТИ І ДОДАТИ В KEITARO",
             use_container_width=True,
             type="primary",
