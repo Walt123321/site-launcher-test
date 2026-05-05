@@ -12,7 +12,7 @@ import zipfile
 from pathlib import Path
 from typing import Optional
 from core.review_pipeline import generate_review
-from core.keitaro import create_project
+from core.keitaro import create_full_project
 
 
 
@@ -1542,7 +1542,7 @@ elif st.session_state.step == 2:
         
                 status_box.info("🟡 Додаємо в Keitaro...")
         
-                result = create_project(
+                result = create_full_project(
                     domain=domain,
                     zip_path=zip_path
                 )
