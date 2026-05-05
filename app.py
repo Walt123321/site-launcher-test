@@ -1558,12 +1558,13 @@ elif st.session_state.step == 2:
 
                 from core.keitaro import create_multiple_projects
 
-                results = create_multiple_projects(
-                    domains=domains,
-                    zip_path=zip_path,
-                    callback=live_callback,
-                    max_workers=5
-                )
+                with st.spinner("🚀 Виконується паралельний запуск..."):
+                    results = create_multiple_projects(
+                        domains=domains,
+                        zip_path=zip_path,
+                        callback=print,
+                        max_workers=5
+                    )
 
                 progress.progress(1.0)
                 status_box.success("✅ Усі сайти створені!")
