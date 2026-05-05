@@ -1520,60 +1520,61 @@ elif st.session_state.step == 2:
 
         st.markdown("---")
 
-        st.markdown("---")
-        
-        if st.button(
+                if st.button(
             "🚀 СТВОРИТИ І ДОДАТИ В KEITARO",
             use_container_width=True,
             type="primary",
             disabled=(len(st.session_state.chosen_domains) != int(st.session_state.sites_count))
         ):
             st.session_state.run_generation = True
-        
-        
+
+
         if st.session_state.get("run_generation"):
-        
+
             domains = st.session_state.chosen_domains
             total = len(domains)
-        
+
             progress = st.progress(0)
             status_box = st.empty()
             result_box = st.container()
-        
+
             try:
-                all_results = []
-        
-                for i, domain in enumerate(domains, start=1):
-        
-                    status_box.info(f"🟡 [{i}/{total}] Генеруємо сайт: {domain}")
-        
-                    # ПОКИ тестовий zip
-                    zip_path = "test.com.zip"
-        
-                    status_box.info(f"🟡 [{i}/{total}] Додаємо в Keitaro: {domain}")
-        
-                    result = create_full_project(
-                        domain=domain,
-                        zip_path=zip_path,
-                        callback=lambda txt: status_box.info(f"🟡 [{i}/{total}] {txt}")
-                    )
-        
-                    all_results.append({
-                        "domain": domain,
-                        "result": result
-                    })
-        
-                    progress.progress(i / total)
-        
+                zip_path = "test.com.zip"
+
+                done_counter = {"count": 0}
+
+                def live_callback(txt):
+                    status_box.info(txt)
+
+                    if (
+                        "готовий" in txt.lower()
+                        or "успішно" in txt.lower()
+                        or "https ok" in txt.lower()
+                    ):
+                        done_counter["count"] += 1
+                        progress.progress(
+                            min(done_counter["count"] / total, 1.0)
+                        )
+
+                from core.keitaro import create_multiple_projects
+
+                results = create_multiple_projects(
+                    domains=domains,
+                    zip_path=zip_path,
+                    callback=live_callback,
+                    max_workers=5
+                )
+
+                progress.progress(1.0)
                 status_box.success("✅ Усі сайти створені!")
-        
+
                 with result_box:
-                    for row in all_results:
+                    for row in results:
                         st.markdown(f"### 🌐 {row['domain']}")
-                        st.json(row["result"])
-        
+                        st.json(row)
+
                 st.session_state.run_generation = False
-        
+
             except Exception as e:
                 status_box.error(f"❌ Помилка: {str(e)}")
                 st.session_state.run_generation = False
