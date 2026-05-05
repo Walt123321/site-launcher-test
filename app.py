@@ -1517,6 +1517,20 @@ elif st.session_state.step == 2:
             on_click=step2_continue,
         )
 
+        st.markdown("---")
+
+        if st.button(
+            "🚀 СТВОРИТИ І ДОДАТИ В KEITARO",
+            use_container_width=True,
+            type="primary"
+        ):
+            st.session_state.run_generation = True
+        
+        
+        if st.session_state.get("run_generation"):
+
+        st.info("🚀 Запуск процесу...")
+
 
     with right:
         st.markdown("### Список доменів")
