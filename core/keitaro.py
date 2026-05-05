@@ -2,7 +2,6 @@ import requests
 import urllib3
 import base64
 import time
-from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 urllib3.disable_warnings()
@@ -80,13 +79,7 @@ def get(url):
 # =====================================================
 
 def create_offer(domain: str, zip_bytes):
-    zip_file = Path(zip_path)
-
-    if not zip_file.exists():
-        raise Exception(f"ZIP not found: {zip_path}")
-
-    with open(zip_file, "rb") as f:
-        archive_b64 = base64.b64encode(zip_bytes).decode()
+    archive_b64 = base64.b64encode(zip_bytes).decode()
 
     payload = {
         "name": domain,
@@ -223,7 +216,7 @@ def check_https(domain: str, callback=None):
 
 
 # =====================================================
-# STAGE 1 (FAST)
+# STAGE 1
 # =====================================================
 
 def prepare_project(domain: str, zip_bytes, callback=None):
@@ -234,7 +227,7 @@ def prepare_project(domain: str, zip_bytes, callback=None):
             callback(msg)
 
     log(f"🚀 {domain}: створення offer")
-    offer_id = create_offer(domain, zip_path)
+    offer_id = create_offer(domain, zip_bytes)
 
     log(f"🚀 {domain}: створення campaign")
     campaign_id = create_campaign(domain)
@@ -255,7 +248,7 @@ def prepare_project(domain: str, zip_bytes, callback=None):
 
 
 # =====================================================
-# STAGE 2 (WAIT HTTPS)
+# STAGE 2
 # =====================================================
 
 def finalize_project(project: dict, callback=None):
@@ -270,36 +263,24 @@ def finalize_project(project: dict, callback=None):
 
 
 # =====================================================
-# SINGLE DOMAIN
+# SINGLE
 # =====================================================
 
 def create_full_project(domain: str, zip_bytes, callback=None):
-    project = prepare_project(domain, zip_path, callback)
+    project = prepare_project(domain, zip_bytes, callback)
     project = finalize_project(project, callback)
     return project
 
 
 # =====================================================
-# MULTI DOMAIN ULTRA MODE
+# MULTI
 # =====================================================
 
-def create_multiple_projects(domains, zip_path, callback=None, max_workers=5):
-    """
-    Реально паралельний режим:
-
-    Stage 1:
-        всі домени створюються одночасно
-
-    Stage 2:
-        всі домени одночасно чекають SSL
-    """
+def create_multiple_projects(domains, zip_map, callback=None, max_workers=5):
 
     prepared = []
     final_results = []
 
-    # ---------------------------------
-    # STAGE 1
-    # ---------------------------------
     if callback:
         callback("🚀 Stage 1: створення всіх проектів...")
 
@@ -308,7 +289,7 @@ def create_multiple_projects(domains, zip_path, callback=None, max_workers=5):
             executor.submit(
                 prepare_project,
                 domain,
-                zip_path,
+                zip_map[domain],
                 callback
             ): domain
             for domain in domains
@@ -327,9 +308,6 @@ def create_multiple_projects(domains, zip_path, callback=None, max_workers=5):
                     "error": str(e)
                 })
 
-    # ---------------------------------
-    # STAGE 2
-    # ---------------------------------
     if callback:
         callback("🌐 Stage 2: очікування SSL / DNS...")
 
