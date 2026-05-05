@@ -15,9 +15,9 @@ import streamlit as st
 
 API_KEY = st.secrets["KEITARO_API_KEY"]
 BASE_URL = st.secrets["KEITARO_BASE_URL"]
-GROUP_ID = 2
 TIMEOUT = 120
-
+CAMPAIGN_GROUP_ID = 2
+OFFER_GROUP_ID = 3
 HEADERS = {
     "Api-Key": API_KEY,
     "Content-Type": "application/json"
@@ -28,18 +28,26 @@ HEADERS = {
 # HELPERS
 # =====================================================
 
-def set_config(api_key: str, base_url: str, group_id: int = 1):
-    global API_KEY, BASE_URL, GROUP_ID, HEADERS
+def set_config(
+    api_key: str,
+    base_url: str,
+    campaign_group_id: int = 1,
+    offer_group_id: int = 1
+):
+    global API_KEY, BASE_URL
+    global CAMPAIGN_GROUP_ID, OFFER_GROUP_ID
+    global HEADERS
 
     API_KEY = api_key
     BASE_URL = base_url.rstrip("/")
-    GROUP_ID = group_id
+
+    CAMPAIGN_GROUP_ID = campaign_group_id
+    OFFER_GROUP_ID = offer_group_id
 
     HEADERS = {
         "Api-Key": API_KEY,
         "Content-Type": "application/json"
     }
-
 
 def post(url, payload):
     return requests.post(
@@ -85,7 +93,7 @@ def create_offer(domain: str, zip_path: str):
 
     payload = {
         "name": domain,
-        "group_id": GROUP_ID,
+        "group_id": OFFER_GROUP_ID,
         "offer_type": "local",
         "state": "active",
         "archive": archive_b64
@@ -109,7 +117,7 @@ def create_campaign(domain: str):
         "alias": domain,
         "type": "position",
         "state": "active",
-        "group_id": GROUP_ID
+        "group_id": CAMPAIGN_GROUP_ID
     }
 
     r = post(f"{BASE_URL}/campaigns", payload)
@@ -190,26 +198,38 @@ def attach_campaign(domain_id: int, campaign_id: int):
 # STEP 6 — HTTPS CHECK
 # =====================================================
 
-def check_https(domain: str):
+def check_https(domain: str, callback=None):
+    import requests
+    import time
+
     url = f"https://{domain}"
 
-    r = requests.get(
-        url,
-        timeout=30,
-        verify=False
-    )
+    while True:
+        try:
+            if callback:
+                callback(f"⏳ Перевіряю HTTPS: {domain}")
 
-    if r.status_code != 200:
-        return False, False
+            r = requests.get(
+                url,
+                timeout=30,
+                verify=False
+            )
 
-    html = r.text.lower()
+            if r.status_code == 200:
+                html = r.text.lower()
 
-    breadcrumb = (
-        "breadcrumblist" in html
-        and "application/ld+json" in html
-    )
+                breadcrumb = (
+                    "breadcrumblist" in html
+                    and "application/ld+json" in html
+                )
 
-    return True, breadcrumb
+                return True, breadcrumb
+
+        except Exception as e:
+            if callback:
+                callback("🌐 DNS / SSL ще не готовий. Чекаю 1 хвилину...")
+
+        time.sleep(60)
 
 
 # =====================================================
