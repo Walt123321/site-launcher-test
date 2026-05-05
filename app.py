@@ -1529,7 +1529,7 @@ elif st.session_state.step == 2:
         
         if st.session_state.get("run_generation"):
 
-        st.info("🚀 Запуск процесу...")
+            st.info("🚀 Запуск процесу...")
 
 
     with right:
