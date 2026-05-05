@@ -1538,7 +1538,7 @@ elif st.session_state.step == 2:
                 # тестова зіпка
                 zip_path = "test.com.zip"
         
-                domain = selected_domains[0]   # перший вибраний домен
+                domain = st.session_state.chosen_domains[0]   # перший вибраний домен
         
                 status_box.info("🟡 Додаємо в Keitaro...")
         
