@@ -1530,52 +1530,94 @@ elif st.session_state.step == 2:
 
 
         if st.session_state.get("run_generation"):
-
+        
             domains = st.session_state.chosen_domains
             total = len(domains)
-
+        
             progress = st.progress(0)
             status_box = st.empty()
             result_box = st.container()
-
+        
             try:
-                zip_map = st.session_state["generated_site_zips"]
-
-                done_counter = {"count": 0}
-
-                def live_callback(txt):
-                    status_box.info(txt)
-
-                    if (
-                        "готовий" in txt.lower()
-                        or "успішно" in txt.lower()
-                        or "https ok" in txt.lower()
-                    ):
-                        done_counter["count"] += 1
-                        progress.progress(
-                            min(done_counter["count"] / total, 1.0)
-                        )
-
-                from core.keitaro import create_multiple_projects
-
-                with st.spinner("🚀 Виконується паралельний запуск..."):
-                    results = create_multiple_projects(
-                        domains=domains,
-                        zip_map=zip_map,
-                        callback=print,
-                        max_workers=5
+                brand = (st.session_state.get("brand") or "").strip()
+                geo_code = st.session_state.get("geo_code") or "UNKNOWN"
+                target_lang = st.session_state.get("target_lang") or "en"
+        
+                geo_currency = "EUR"
+                if geo_code in geo:
+                    geo_currency = geo[geo_code].get("currency", "EUR")
+        
+                MODEL = "gpt-5-mini"
+        
+                status_box.info("🟡 Генерую lang.php файли...")
+        
+                files = generate_lang_files_multi(
+                    template1_bytes=open(TEMPLATES["template_1"]["lang"], "rb").read(),
+                    template2_bytes=open(TEMPLATES["template_2"]["lang"], "rb").read(),
+                    template3_bytes=open(TEMPLATES["template_3"]["lang"], "rb").read(),
+                    template4_bytes=open(TEMPLATES["template_4"]["lang"], "rb").read(),
+                    domain_templates=st.session_state.get("domain_templates", {}),
+                    geo_code=geo_code,
+                    geo_currency=geo_currency,
+                    target_lang=target_lang,
+                    domains=domains,
+                    brand=brand,
+                    model=MODEL,
+                    geo_defaults=geo,
+                )
+        
+                progress.progress(0.2)
+        
+                TEMPLATE_DIRS = {
+                    "template_1": "templates/template_1-1",
+                    "template_2": "templates/template_2",
+                    "template_3": "templates/template_3",
+                    "template_4": "templates/template_4",
+                }
+        
+                zip_map = {}
+                dt = st.session_state.get("domain_templates", {})
+        
+                status_box.info("🟡 Пакую zip архіви...")
+        
+                for item in files:
+                    domain = item["domain"]
+        
+                    tpl_id = dt.get(domain, "template_1")
+                    tpl_dir = TEMPLATE_DIRS.get(tpl_id)
+        
+                    zip_map[domain] = build_domain_site_zip(
+                        domain=domain,
+                        site_template_dir=tpl_dir,
+                        lang_php_content=item["content"],
+                        target_lang=target_lang,
+                        geo_code=geo_code.lower(),
+                        brand=brand,
                     )
-
+        
+                progress.progress(0.4)
+        
+                from core.keitaro import create_multiple_projects
+        
+                status_box.info("🟡 Запускаю Keitaro...")
+        
+                results = create_multiple_projects(
+                    domains=domains,
+                    zip_map=zip_map,
+                    callback=lambda txt: status_box.info(txt),
+                    max_workers=5
+                )
+        
                 progress.progress(1.0)
                 status_box.success("✅ Усі сайти створені!")
-
+        
                 with result_box:
                     for row in results:
                         st.markdown(f"### 🌐 {row['domain']}")
                         st.json(row)
-
+        
                 st.session_state.run_generation = False
-
+        
             except Exception as e:
                 status_box.error(f"❌ Помилка: {str(e)}")
                 st.session_state.run_generation = False
