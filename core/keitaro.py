@@ -29,7 +29,7 @@ HEADERS = {
 
 
 # =====================================================
-# CONFIG OVERRIDE
+# HELPERS
 # =====================================================
 
 def set_config(
@@ -56,10 +56,6 @@ def set_config(
     }
 
 
-# =====================================================
-# HTTP HELPERS
-# =====================================================
-
 def post(url, payload):
     return requests.post(
         url,
@@ -74,16 +70,6 @@ def get(url):
     return requests.get(
         url,
         headers=HEADERS,
-        timeout=TIMEOUT,
-        verify=False
-    )
-
-
-def put(url, payload):
-    return requests.put(
-        url,
-        headers=HEADERS,
-        json=payload,
         timeout=TIMEOUT,
         verify=False
     )
@@ -171,18 +157,19 @@ def create_flow(domain: str, campaign_id: int, offer_id: int):
 
 
 # =====================================================
-# DOMAIN CREATE
+# DOMAIN
 # =====================================================
 
 def create_domain(domain: str, campaign_id: int):
     payload = {
         "name": domain,
-        "group_id": DOMAIN_GROUP_ID,
         "default_campaign_id": campaign_id,
-        "allow_indexing": True,
-        "admin_dashboard": False,
+        "group_id": DOMAIN_GROUP_ID,
+        "catch_not_found": False,
+        "notes": "",
         "ssl_redirect": True,
-        "catch_not_found": False
+        "allow_indexing": True,
+        "admin_dashboard": False
     }
 
     r = post(f"{BASE_URL}/domains", payload)
@@ -199,7 +186,7 @@ def create_domain(domain: str, campaign_id: int):
 
 
 # =====================================================
-# HTTPS CHECK LOOP
+# HTTPS CHECK
 # =====================================================
 
 def check_https(domain: str, callback=None):
@@ -208,7 +195,7 @@ def check_https(domain: str, callback=None):
     while True:
         try:
             if callback:
-                callback(f"🌐 HTTPS check: {domain}")
+                callback(f"🌐 {domain}: перевірка HTTPS...")
 
             r = requests.get(
                 url,
@@ -230,21 +217,21 @@ def check_https(domain: str, callback=None):
             pass
 
         if callback:
-            callback(f"⏳ {domain} ще не готовий. Чекаю 1 хвилину...")
+            callback(f"⏳ {domain}: DNS / SSL ще не готовий. Чекаю 1 хв...")
 
         time.sleep(60)
 
 
 # =====================================================
-# SINGLE DOMAIN FULL PROCESS
+# STAGE 1 (FAST)
 # =====================================================
 
-def create_full_project(domain: str, zip_path: str, callback=None):
+def prepare_project(domain: str, zip_path: str, callback=None):
 
-    def log(text):
-        print(text)
+    def log(msg):
+        print(msg)
         if callback:
-            callback(text)
+            callback(msg)
 
     log(f"🚀 {domain}: створення offer")
     offer_id = create_offer(domain, zip_path)
@@ -258,32 +245,68 @@ def create_full_project(domain: str, zip_path: str, callback=None):
     log(f"🚀 {domain}: створення domain")
     domain_id = create_domain(domain, campaign_id)
 
-    log(f"🚀 {domain}: очікування HTTPS")
-    https_ok, breadcrumb_ok = check_https(domain, callback)
-
     return {
         "domain": domain,
         "offer_id": offer_id,
         "campaign_id": campaign_id,
         "flow_id": flow_id,
-        "domain_id": domain_id,
-        "https": https_ok,
-        "breadcrumb": breadcrumb_ok
+        "domain_id": domain_id
     }
 
 
 # =====================================================
-# MULTI DOMAIN PARALLEL
+# STAGE 2 (WAIT HTTPS)
+# =====================================================
+
+def finalize_project(project: dict, callback=None):
+    domain = project["domain"]
+
+    https_ok, breadcrumb_ok = check_https(domain, callback)
+
+    project["https"] = https_ok
+    project["breadcrumb"] = breadcrumb_ok
+
+    return project
+
+
+# =====================================================
+# SINGLE DOMAIN
+# =====================================================
+
+def create_full_project(domain: str, zip_path: str, callback=None):
+    project = prepare_project(domain, zip_path, callback)
+    project = finalize_project(project, callback)
+    return project
+
+
+# =====================================================
+# MULTI DOMAIN ULTRA MODE
 # =====================================================
 
 def create_multiple_projects(domains, zip_path, callback=None, max_workers=5):
-    results = []
+    """
+    Реально паралельний режим:
+
+    Stage 1:
+        всі домени створюються одночасно
+
+    Stage 2:
+        всі домени одночасно чекають SSL
+    """
+
+    prepared = []
+    final_results = []
+
+    # ---------------------------------
+    # STAGE 1
+    # ---------------------------------
+    if callback:
+        callback("🚀 Stage 1: створення всіх проектів...")
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-
         futures = {
             executor.submit(
-                create_full_project,
+                prepare_project,
                 domain,
                 zip_path,
                 callback
@@ -296,12 +319,41 @@ def create_multiple_projects(domains, zip_path, callback=None, max_workers=5):
 
             try:
                 result = future.result()
-                results.append(result)
+                prepared.append(result)
 
             except Exception as e:
-                results.append({
+                final_results.append({
                     "domain": domain,
                     "error": str(e)
                 })
 
-    return results
+    # ---------------------------------
+    # STAGE 2
+    # ---------------------------------
+    if callback:
+        callback("🌐 Stage 2: очікування SSL / DNS...")
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = {
+            executor.submit(
+                finalize_project,
+                project,
+                callback
+            ): project["domain"]
+            for project in prepared
+        }
+
+        for future in as_completed(futures):
+            domain = futures[future]
+
+            try:
+                result = future.result()
+                final_results.append(result)
+
+            except Exception as e:
+                final_results.append({
+                    "domain": domain,
+                    "error": str(e)
+                })
+
+    return final_results
