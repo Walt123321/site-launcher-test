@@ -1528,8 +1528,33 @@ elif st.session_state.step == 2:
         
         
         if st.session_state.get("run_generation"):
+        
+            from keitaro import create_project
+        
+            status_box = st.empty()
+        
+            try:
+                status_box.info("🟡 Генеруємо сайт...")
+        
+                # тестова зіпка
+                zip_path = "test.com.zip"
+        
+                domain = selected_domains[0]   # перший вибраний домен
+        
+                status_box.info("🟡 Додаємо в Keitaro...")
+        
+                result = create_project(
+                    domain=domain,
+                    zip_path=zip_path
+                )
+        
+                status_box.success(f"✅ Готово: {domain}")
+        
+                st.json(result)
+        
+            except Exception as e:
+                status_box.error(f"❌ Помилка: {str(e)}")
 
-            st.info("🚀 Запуск процесу...")
 
 
     with right:
