@@ -295,24 +295,56 @@ def create_full_project(domain: str, zip_bytes: bytes, callback=None):
 
 def create_multiple_projects(domains, zip_map, callback=None, max_workers=5):
 
-    prepared = []
     final_results = []
+
+    # ==========================================
+    # SINGLE DOMAIN MODE
+    # ==========================================
+    if len(domains) == 1:
+        domain = domains[0]
+
+        try:
+            if callback:
+                callback(f"🚀 Single mode: {domain}")
+
+            if domain not in zip_map:
+                return [{
+                    "domain": domain,
+                    "error": "ZIP not found"
+                }]
+
+            result = create_full_project(
+                domain,
+                zip_map[domain],
+                callback
+            )
+
+            return [result]
+
+        except Exception as e:
+            return [{
+                "domain": domain,
+                "error": str(e)
+            }]
+
+    # ==========================================
+    # MULTI DOMAIN MODE
+    # ==========================================
+    prepared = []
 
     if callback:
         callback("🚀 Stage 1: creating projects...")
 
-    # -------------------------
-    # STAGE 1
-    # -------------------------
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
 
         futures = {}
 
         for domain in domains:
+
             if domain not in zip_map:
                 final_results.append({
                     "domain": domain,
-                    "error": "ZIP not found in zip_map"
+                    "error": "ZIP not found"
                 })
                 continue
 
@@ -329,8 +361,7 @@ def create_multiple_projects(domains, zip_map, callback=None, max_workers=5):
             domain = futures[future]
 
             try:
-                result = future.result()
-                prepared.append(result)
+                prepared.append(future.result())
 
             except Exception as e:
                 final_results.append({
@@ -338,9 +369,9 @@ def create_multiple_projects(domains, zip_map, callback=None, max_workers=5):
                     "error": str(e)
                 })
 
-    # -------------------------
-    # STAGE 2
-    # -------------------------
+    # ==========================================
+    # HTTPS CHECK
+    # ==========================================
     if callback:
         callback("🌐 Stage 2: waiting HTTPS...")
 
@@ -359,8 +390,7 @@ def create_multiple_projects(domains, zip_map, callback=None, max_workers=5):
             domain = futures[future]
 
             try:
-                result = future.result()
-                final_results.append(result)
+                final_results.append(future.result())
 
             except Exception as e:
                 final_results.append({
