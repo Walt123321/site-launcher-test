@@ -27,23 +27,49 @@ from core.lang_pipeline import generate_lang_files_multi
 # ---- Page config (must be before any st.* calls) ----
 
 def _get_favicon():
-    # Page icon in the browser tab (cheap status indicator).
+    # Page icon in browser tab
+
     step = int(st.session_state.get("step", 1))
+
     domains_checked = bool(st.session_state.get("domains_checked_done"))
     archives_ready = bool(st.session_state.get("archives_ready"))
     has_files = bool(st.session_state.get("generated_files"))
 
-    # Step 2: show planet ONLY after all domains were checked
+    # NEW:
+    projects = st.session_state.get("keitaro_results", [])
+
+    all_ready = False
+    if projects:
+        good = [
+            p for p in projects
+            if p.get("https") is True and p.get("breadcrumb") is True
+        ]
+        all_ready = len(good) == len(projects)
+
+    # -------------------------
+    # STEP 2
+    # -------------------------
     if step == 2:
         return "🌐" if domains_checked else "🔎"
 
-    # Step 3: show check ONLY after archives were built
+    # -------------------------
+    # STEP 3
+    # -------------------------
     if step == 3:
-        if archives_ready:
+
+        # якщо сайти реально відкрились + breadcrumb
+        if all_ready:
             return "✅"
-        if has_files:
+
+        # якщо архіви готові
+        if archives_ready:
             return "📦"
-        return "⚙️"
+
+        # якщо lang.php готові
+        if has_files:
+            return "⚙️"
+
+        return "🛠️"
 
     return "🚀"
 
