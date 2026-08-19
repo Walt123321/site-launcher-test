@@ -706,7 +706,7 @@ main {
 }
 @media (width <= 63.99875rem) {
   .welcome__form {
-    position: inherit;
+    position: relative;
     margin-inline: auto;
   }
 }
