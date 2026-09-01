@@ -1,505 +1,452 @@
 <?php
 require __DIR__ . '/../lang.php';
 $site_lang = 'de-DE';
-$form_language = 'de';
+$form_language = 'de'; // matches this page's own language, not the offer's global default
 
 // ============================================================
 // DE TRANSLATION OVERRIDES
-// Identity/config vars ($site_name, $site_url, $site_domain, $app_price,
-// $app_currency, $rating_value, $rating_count, $review_count, $country_name,
-// $country_flag_code, $review_1_author..$review_4_author,
-// $quiz_consultant_name, $privacy_last_update) are intentionally NOT
-// overridden -- they stay exactly as inherited from the root lang.php.
+// Identity/config vars ($site_name, $site_slug, $site_domain, $site_url, $app_price, $app_currency, $site_lang, $country_name, $privacy_last_update, $rating_value, $rating_count, $review_count, $form_country, $form_language, $form_phone_country, $form_only_countries, $review_1_author, $review_2_author, $review_3_author, $review_4_author, $review_5_author, $quiz_consultant_name) are
+// intentionally NOT overridden -- they stay exactly as inherited from the
+// root lang.php.
 // ============================================================
 
-// Reviews -- role text (country names) is translated; author names stay as inherited from root
-$review_1_role = "Frankreich";
-$review_2_role = "Deutschland";
-$review_3_role = "Italien";
-$review_4_role = "Niederlande";
+// Brand / Platform Variables
 
-// MAIN TITLE/DESCRIPTION
-$home_meta_title = "$site_name — Handelsplattform | Offizielle Website";
-$home_meta_description = "Die offizielle Website von $site_name bietet eine sichere Kryptowährungs-Handelsplattform mit fortschrittlichen Trading-Tools, Markteinblicken in Echtzeit und einer benutzerfreundlichen Erfahrung für Trader.";
+// Ratings (TZ item 21 -- SoftwareApplication schema)
 
-// ==========================================
-// SHARED FORM DISCLAIMER (used on every lead form across the site)
-// ==========================================
-$form_disclaimer_prefix = "Mit der Eingabe Ihrer persönlichen Daten und dem Klick auf die Schaltfläche akzeptieren Sie die";
-$form_privacy_link_label = "Datenschutzerklärung";
-$form_disclaimer_and = "und die";
-$form_terms_link_label = "Nutzungsbedingungen";
-$form_disclaimer_of_site = "dieser Website.";
-$form_disclaimer_risk_note = "Bitte lesen Sie auch unseren";
+// Keitaro Form Integration Variables (defaults -- overwritten per-launch by
+// generate_lang_files(); must stay valid on their own since nothing else in
+// this file replaces them for a page that's ever served un-generated)
 
-// Service-page form disclaimer (product/offer/contacts/faq/sign) -- same content, template_7 naming convention
-$form_text = $form_disclaimer_prefix;
-$form_text_privacy = $form_privacy_link_label;
-$form_text_privacy_and = $form_disclaimer_and;
-$form_text_conditions = $form_terms_link_label;
-$form_text_conditions_of = $form_disclaimer_of_site;
-$form_text_risk_warning_note = $form_disclaimer_risk_note;
+// -------------------------
+// Meta (TZ item 9)
+// -------------------------
+$home_meta_title = "$site_name — Offizielle Website | Handelsplattform";
+$home_meta_description = "$site_name bietet eine benutzerfreundliche Handelsplattform mit fortschrittlichen Markttools, Echtzeit-Einblicken und praktischen Funktionen, die den Online-Handel zugänglicher und informierter machen.";
 
-// FORM (Compact UI layout)
-$form_name_placeholder = "Geben Sie Ihren Vornamen ein";
-$form_surname_placeholder = "Geben Sie Ihren Nachnamen ein";
-$form_email_placeholder = "Geben Sie Ihre E-Mail-Adresse ein";
-$form_submit = "Registrieren";
-
-// HERO
+// -------------------------
+// Hero
+// -------------------------
 $hero_h1 = "$site_name Plattform";
-$hero_text = "Die offizielle Kryptowährungs-Handelsplattform von $site_name — entwickelt, um den Handel mit Kryptowährungen so einfach zu machen wie alltägliches Online-Banking, egal ob Sie zum ersten Mal traden oder bereits langjähriger Investor sind.";
-$hero_form_heading = "Erstellen Sie Ihr kostenloses Konto";
-$hero_form_button = "Registrieren";
+$hero_subtitle = "Unterstützt Millionen weltweit auf ihrer Reise mit digitalen Vermögenswerten";
+$hero_badge_title = "Zufriedene Mitglieder";
+$hero_badge_subtitle = "Von Millionen geliebt";
+$hero_rating_value = "4,9";
+$hero_rating_count = "420";
 
-// STATS BAR ("Ciel Cryptance in numbers")
-$stats_label = "$site_name in Zahlen";
-$stats_title = "Zahlen, die mehr sagen als Versprechen";
-$stat_1_value = "4 Mio.+";
-$stat_1_label = "Registrierte Nutzer";
-$stat_2_value = "98+";
-$stat_2_label = "Unterstützte Länder";
-$stat_3_value = "65+";
-$stat_3_label = "Verfügbare Währungen";
-$stat_4_value = "24/7";
-$stat_4_label = "Transaktionszugang";
-$stat_5_value = "256-Bit";
-$stat_5_label = "Verschlüsselungsstandard";
-$stat_6_value = "\$500 Mio.+";
-$stat_6_label = "Gesamteinlagen der Kunden";
+// Hero lead form
+$form_title = "Beginnen Sie Noch Heute mit dem Handel";
+$form_desc = "Bereit für den nächsten Schritt? Registrieren Sie sich jetzt und machen Sie den ersten Schritt in Richtung finanzieller Freiheit. Beginnen Sie mit nur $app_price $app_currency — Zugang zu jedem Handelswerkzeug, Echtzeit-Marktdaten und vollem Plattformzugang ab dem ersten Tag.";
+$form_fname_placeholder = "Name";
+$form_lname_placeholder = "Nachname";
+$form_email_placeholder = "E-Mail";
+$form_btn_submit = "Registrieren";
+$form_disclaimer_text = "Durch die Eingabe Ihrer persönlichen Daten und das Klicken auf die Schaltfläche stimmen Sie der <a class=\"link\" href=\"privacy.php\">Datenschutzerklärung</a> und den <a class=\"link\" href=\"conditions.php\">Nutzungsbedingungen</a> der Website zu.";
 
-// PARTNERS STRIP
-$partners_label = "Vertraut von führenden Partnern";
+// Payment badges (TZ item 3, stelardividenta.com style)
+$badge_visa = "VISA";
+$badge_mastercard = "Mastercard";
+$badge_maestro = "Maestro";
+$badge_secure = "SICHER";
 
-// WHAT IS SECTION
-$whatis_label = "Über die Plattform";
-$whatis_title = "Was ist $site_name?";
-$whatis_intro = "$site_name ist die offizielle Online-Handelsplattform, die den Handel mit Kryptowährungen so einfach macht wie alltägliches Online-Banking — egal, ob Sie blutiger Anfänger oder langjähriger Investor sind.";
-$whatis_icon_1_title = "KI-gestützte Analyse";
-$whatis_icon_1_text = "Fortschrittliche Algorithmen übernehmen die gesamte Komplexität der Märkte für Sie.";
-$whatis_icon_2_title = "Sofortige Ausführung";
-$whatis_icon_2_text = "Tausende Datenpunkte werden jede Sekunde verarbeitet — Trades ohne Verzögerung.";
-$whatis_icon_3_title = "Einfaches, intuitives Dashboard";
-$whatis_icon_3_text = "Behalten Sie Ihr Guthaben und offene Positionen jederzeit auf einen Blick im Überblick.";
-$whatis_icon_4_title = "Niedrige Einstiegshürde";
-$whatis_icon_4_text = "Starten Sie mit einer Mindesteinzahlung von nur $app_price $app_currency — ohne versteckte Gebühren.";
-$whatis_flow_1 = "KI analysiert die Märkte";
-$whatis_flow_2 = "Erkennt Signale";
-$whatis_flow_3 = "Führt Trades aus";
-$whatis_cta_text = "Möchten Sie mehr über unser Team und unser Produkt erfahren?";
-$whatis_cta_link = "Über uns";
+// -------------------------
+// Stats ("Get to Know the Platform")
+// -------------------------
+$stats_label = "Lernen Sie die Plattform Kennen";
+$stats_title = "Eine kurze Einführung in intelligenteren Handel";
+$stat_1_value = "154+";
+$stat_1_label = "Abgedeckte Länder";
+$stat_2_value = "29 Millionen";
+$stat_2_label = "Globale Investoren";
+$stat_3_value = "635+";
+$stat_3_label = "Coins";
+$stat_4_value = "3,26 Milliarden $";
+$stat_4_label = "24h-Handelsvolumen";
 
-// KEY BENEFITS
-$benefits_label = "Wichtige Vorteile";
-$benefits_title = "Die wichtigsten Vorteile von $site_name";
-$benefit_1_title = "Einsteigerfreundliche Plattform";
-$benefit_1_text = "Intuitive Charts und Schritt-für-Schritt-Anleitungen helfen Ihnen beim Einstieg, ohne dass Sie sich überfordert fühlen. Sie können auch dann mit Kryptowährungen handeln, wenn Sie zum ersten Mal dabei sind — wir begleiten Sie durch jeden einzelnen Schritt.";
-$benefit_2_title = "Offiziell und reguliert";
-$benefit_2_text = "$site_name ist lizenziert und erfüllt die geltenden Finanzvorschriften. Wir nutzen SSL-Verschlüsselung und Zwei-Faktor-Authentifizierung, um Ihr Konto und Ihre Gelder zu schützen. Keine leeren Versprechen — nur ehrliche, zuverlässige Unterstützung beim Trading.";
-$benefit_3_title = "Niedrige Einstiegshürde";
-$benefit_3_text = "Mit einer Mindesteinzahlung von nur $app_price $app_currency kann jeder loslegen. Eine große Anfangsinvestition ist nicht erforderlich — starten Sie klein und erhöhen Sie Ihren Einsatz, sobald Ihr Vertrauen wächst.";
-$benefit_4_title = "Transparente Gebühren";
-$benefit_4_text = "Versteckte Gebühren werden Sie bei uns nie finden. Wir erheben, sofern zutreffend, nur minimale Transaktions- oder Auszahlungsgebühren, damit mehr von Ihrem Geld bei Ihnen bleibt.";
-$benefit_5_title = "Rund-um-die-Uhr-Zugang zu Transaktionen";
-$benefit_5_text = "Handeln Sie nach Ihrem eigenen Zeitplan, Tag und Nacht. $site_name funktioniert auf dem Desktop genauso gut wie mobil, sodass Sie überall auf Marktbewegungen reagieren können. Unsere Plattform ist schnell und zuverlässig — Preise werden in Echtzeit aktualisiert, damit Sie Chancen schnell nutzen können.";
-$benefit_6_title = "Lokaler Kundensupport";
-$benefit_6_text = "Unser Support-Team ist per Chat, Telefon oder E-Mail erreichbar. Echte Menschen helfen Ihnen in Ihrer Sprache, wann immer Sie es brauchen.";
-$benefits_trust_title = "Weltweit vertraut";
-$benefits_trust_text = "Deshalb vertrauen so viele Kryptowährungs-Nutzer $site_name. Tausende Trader handeln bereits mit $site_name, und unsere Community wächst täglich weiter — mit besonderer Aufmerksamkeit für jeden neuen Nutzer.";
-$benefits_cta = "Registrieren";
-$benefits_badge_1 = "256-Bit-SSL";
-$benefits_badge_2 = "Sichere Zahlungen";
-$benefits_badge_3 = "2FA";
+// -------------------------
+// Why choose us (6 cards, TZ item 22: H3)
+// -------------------------
+$why_label = "Warum $site_name?";
+$why_title = "Gründe für die Wahl";
+$why_1_title = "Schnell &amp; Einfach";
+$why_1_text = "Kaufen und verkaufen Sie Ihre bevorzugten Kryptowährungen in Sekunden.";
+$why_2_title = "Sicher &amp; Geschützt";
+$why_2_text = "Wir nutzen modernste Technologie, um Ihre Gelder und Daten zu schützen.";
+$why_3_title = "Für Jeden Offen";
+$why_3_text = "Handeln Sie rund um die Uhr auf unserer Plattform, wann und wo immer Sie möchten.";
+$why_4_title = "Profi-Tools";
+$why_4_text = "Von einfachen bis zu professionellen Handelsfunktionen haben wir alles.";
+$why_5_title = "Trends &amp; Einblicke";
+$why_5_text = "Erhalten Sie die neuesten Krypto-Nachrichten, Einblicke und Trends von Experten.";
+$why_6_title = "24/7-Support";
+$why_6_text = "Unser freundliches Support-Team steht Ihnen jederzeit zur Verfügung.";
 
-// SECURITY SECTION
-$security_label = "Sicherheit";
-$security_title = "Ihr Geld ist bei $site_name sicher";
-$security_subtitle = "Verschlüsselung auf Bankniveau, verifizierte Zahlungen und 98 % Cold Storage — Ihr Geld ist bei jedem Schritt geschützt.";
-$security_1_title = "Verifizierte Zahlungsanbieter";
-$security_1_text = "Zahlungen werden ausschließlich über zertifizierte Anbieter abgewickelt, die internationale Sicherheitsstandards erfüllen. Ihre Kartendaten werden auf unserer Plattform niemals gespeichert.";
-$security_1_badge = "Sichere Zahlungen";
-$security_2_title = "256-Bit-SSL-Verschlüsselung";
-$security_2_text = "Alle Daten, die zwischen Ihrem Gerät und unserer Plattform ausgetauscht werden, sind mit 256-Bit-TLS verschlüsselt. Kein Dritter kann Ihre Informationen abfangen oder lesen.";
-$security_2_badge = "HTTPS / TLS 1.3";
-$security_3_title = "98 % Cold Storage";
-$security_3_text = "98 % der Vermögenswerte werden in Offline-Wallets ohne Internetverbindung verwahrt. Niemand kann aus der Ferne darauf zugreifen, selbst im Falle eines Angriffs nicht.";
-$security_3_badge = "Offline-Vermögensverwahrung";
-$security_4_title = "Multi-Faktor-Authentifizierung";
-$security_4_text = "Nur Sie haben Zugriff auf Ihr Konto. Jede Anmeldung wird durch einen zweiten Schritt bestätigt, den ausschließlich Sie kontrollieren.";
-$security_4_badge = "2FA aktiviert";
-$security_5_title = "Kontoüberwachung";
-$security_5_text = "Jede Anmeldung, jede Transaktion und jede Einstellungsänderung löst eine sofortige Benachrichtigung aus, damit Sie stets wissen, sobald etwas mit Ihrem Konto geschieht.";
-$security_5_badge = "Echtzeit-Benachrichtigungen";
-$security_6_title = "Passwortschutz";
-$security_6_text = "Passwörter werden in unlesbarer, nicht umkehrbarer Form gespeichert. Wir haben technisch keine Möglichkeit, Ihr Passwort einzusehen.";
-$security_6_badge = "Einweg-Verschlüsselung";
-$security_cta_title = "Holen Sie sich einen kostenlosen Leitfaden!";
-$security_cta_text = "Sichern Sie sich unseren kostenlosen Einsteigerleitfaden und starten Sie noch heute mit dem Trading.";
-$security_cta_button = "Registrieren";
-$security_badge_1 = "98 % Cold Storage";
-$security_badge_2 = "Verifizierte Zahlungen";
-$security_badge_3 = "Verschlüsselt";
-
-// HOW IT WORKS
-$how_label = "So funktioniert's";
-$how_title = "So funktioniert's";
+// -------------------------
+// How it works (3 steps)
+// -------------------------
+$how_label = "So Funktioniert Es";
+$how_title = "Einfache Schritte für den Handelsstart";
 $how_1_title = "Registrieren";
-$how_1_text = "Klicken Sie auf die Schaltfläche \"Konto eröffnen\" und füllen Sie das Registrierungsformular mit Ihren Angaben aus (Name, E-Mail-Adresse und Telefonnummer). Das ist kostenlos und dauert nur wenige Minuten. Wir bitten Sie, Ihre E-Mail-Adresse zu bestätigen und ein Passwort zu erstellen. Zu Ihrer Sicherheit aktivieren Sie die Zwei-Faktor-Authentifizierung (2FA), die Ihre Gelder zusätzlich schützt.";
-$how_2_title = "Geld einzahlen";
-$how_2_text = "Als Nächstes zahlen Sie auf Ihr Konto ein. Die Mindesteinzahlung beträgt nur $app_price $app_currency. Sie können eine Kredit-/Debitkarte, eine lokale Banküberweisung oder gängige E-Wallets nutzen. Ihre Einzahlung sollte schnell auf Ihrem Konto erscheinen. (Tipp: Beginnen Sie mit einem Betrag, mit dem Sie sich wohlfühlen.) Bei Ihrer ersten Einzahlung bitten wir Sie möglicherweise um eine kurze Identitätsprüfung — ein Standardverfahren, das nur wenige Minuten dauert.";
-$how_3_title = "Mit dem Trading beginnen";
-$how_3_text = "Sobald Ihre Gelder auf Ihrem Konto eingegangen sind, können Sie mit dem Trading beginnen. Wählen Sie den gewünschten Vermögenswert (z. B. BTC, SOL oder USDT) und entscheiden Sie, wie viel Sie investieren möchten. $site_name gibt Ihnen die Werkzeuge an die Hand, um Ihre eigene Strategie festzulegen, einschließlich Stop-Loss-Grenzen und Zielpreisen. Wir bieten außerdem eine automatisierte Trading-Option an, die basierend auf dem von Ihnen gewählten Risikoniveau den Marktsignalen für Sie folgt. Verfolgen Sie Live-Charts auf Ihrem Dashboard — sobald ein Trade profitabel ist, aktualisiert sich Ihr Guthaben entsprechend.";
-$how_cta_text = "Benötigen Sie weitere Informationen dazu, wie der Service funktioniert?";
-$how_cta_link = "So funktioniert's";
+$how_1_text = "Erstellen Sie ein Konto und beginnen Sie innerhalb von Minuten mit dem Handel.";
+$how_1_btn = "Handel Starten";
+$how_2_title = "Geld Einzahlen";
+$how_2_text = "Zahlen Sie mindestens $app_price $app_currency auf Ihr Konto ein, um vollen Handelszugang freizuschalten. Wählen Sie aus mehreren Zahlungsmethoden und lassen Sie Ihr Portfolio schon heute wachsen.";
+$how_2_note = "Geld hinzufügen....";
+$how_3_title = "Handel Starten";
+$how_3_text = "Erkunden Sie den Markt und handeln Sie auf Ihre Weise.";
+$how_3_note = "Kaufen und HODLen";
 
-// TRUST REASONS
-$trust_label = "Warum mit uns handeln";
-$trust_title = "Weltweit von Tradern vertraut";
-$trust_intro = "Schließen Sie sich Tausenden Nutzern an, die bereits mit $site_name handeln. Auf unserer Website wird sogar ein Live-Zähler angezeigt, der Ihnen zeigt, wie viele Menschen gerade jetzt traden — so sehen Sie unsere aktive Community in Echtzeit.";
-$trust_subtitle = "Deshalb vertrauen Trader $site_name:";
-$trust_1_title = "Vollständig reguliert";
-$trust_1_text = "$site_name ist ordnungsgemäß registriert und erfüllt die geltenden Finanzvorschriften. Wir arbeiten nach strengen Regeln, um Ihren Schutz zu gewährleisten.";
-$trust_2_title = "Modernste Sicherheit";
-$trust_2_text = "Alle Ihre Daten und Gelder sind verschlüsselt und geschützt. Wir setzen strengen Kontoschutz durch SSL-Verschlüsselung und Zwei-Faktor-Authentifizierung durch, damit Sie mit Zuversicht handeln können — im Wissen, dass wir Sicherheit ernst nehmen.";
-$trust_3_title = "Transparente Abläufe";
-$trust_3_text = "Wir verstecken unsere Gebühren nie und führen nie überraschende Regeln ein. Vor jedem Trade sehen Sie genau, welche Gebühren anfallen. Außerdem kommunizieren wir klar über die mit dem Trading verbundenen Risiken — diese Transparenz ist es, die Vertrauen innerhalb unserer Community schafft.";
-$trust_4_title = "Reaktionsschneller Support";
-$trust_4_text = "Unser Support-Team steht Ihnen per Chat, Telefon oder E-Mail zur Verfügung, um Ihre Fragen zu beantworten oder jedes Problem zu lösen.";
-$trust_cta_text = "Weitere Informationen zur aktuellen Marktlage";
-$trust_cta_link = "Warum handeln";
+// -------------------------
+// Trading calculator (TZ item 24, adapted from template_4)
+// -------------------------
+$calc_badge = "Rechner";
+$calc_title = "Sehen Sie, wie viel Zeit und Potenzial Sie ungenutzt lassen";
+$calc_volume_label = "Monatliches Handelsvolumen";
+$calc_trades_label = "Trades pro Woche";
+$calc_time_label = "Zeit, die Sie sparen könnten";
+$calc_boost_label = "Mögliche Volumensteigerung";
+$calc_btn = "Handel Starten";
 
-// PRE-TESTIMONIALS CTA
-$pretest_title = "Starten Sie mit $app_price $app_currency ins Trading!";
-$pretest_text = "Bereit, $site_name auszuprobieren? Registrieren Sie sich jetzt und werden Sie Teil der wachsenden Community von Krypto-Investoren und -Tradern.";
-$pretest_button = "Registrieren";
-$pretest_badge_1 = "Sicher";
-$pretest_badge_2 = "Reguliert";
-$pretest_badge_3 = "Vertraut von über 4 Mio. Tradern";
+// -------------------------
+// Features (6 cards, TZ item 22: H3)
+// -------------------------
+$features_label = "Funktionen";
+$features_title = "Die Stärke von $site_name";
+$feature_1_title = "Spot-Handel";
+$feature_1_text = "Maximieren Sie Ihr Handelspotenzial mit Profi-Tools.";
+$feature_2_title = "Krypto Kaufen";
+$feature_2_text = "Kaufen Sie Krypto mit Karten oder Banken.";
+$feature_3_title = "Krypto-Derivate";
+$feature_3_text = "Einfacher, fortschrittlicher Terminhandel.";
+$feature_4_title = "$site_name Coin Earn";
+$feature_4_text = "Vermehren Sie Ihr Vermögen mühelos.";
+$feature_5_title = "Trading-Bot";
+$feature_5_text = "Höhere Gewinne, selbst während Sie schlafen.";
+$feature_6_title = "Margin-Handel";
+$feature_6_text = "Leihen, handeln und mühelos zurückzahlen.";
 
-// TESTIMONIALS
-$testimonials_label = "Erfahrungsberichte";
-$testimonials_title = "Vertraut von mehr als 4 Mio. Tradern";
-$review_1_text = "Ich habe mit €500 angefangen, nur um zu sehen, wie die Plattform funktioniert. Nach etwa drei Wochen war mein Guthaben auf rund €1120 angewachsen. Die Oberfläche ist einfach zu bedienen, und die Markteinblicke haben mir geholfen, bessere Entscheidungen zu treffen.";
-$review_2_text = "Ich habe schon ein paar Handelsplattformen ausprobiert, aber diese ist bisher meine liebste. Sie ist einfach zu bedienen, die Tools sind wirklich nützlich, und insgesamt hatte ich eine sehr positive Erfahrung.";
-$review_3_text = "Am meisten beeindruckt hat mich, wie intuitiv sich alles anfühlt. Die Registrierung ging schnell, das Dashboard ist übersichtlich aufgebaut, und die Plattform hat das Trading für mich deutlich bequemer gemacht.";
-$review_4_text = "Ich hatte keine Vorerfahrung im Trading, also habe ich mit €750 begonnen. Innerhalb eines Monats erreichte ich, indem ich den Tools und Lernressourcen folgte, knapp über €1,765. Es war ein großartiger Weg, um Vertrauen aufzubauen.";
+// -------------------------
+// Testimonials (5 reviews)
+// -------------------------
+$reviews_title = "Was Unsere Nutzer Sagen";
+$review_1_text = "Die Plattform ist sehr einfach zu bedienen, und ich habe seit meinem Einstieg stetige Fortschritte gesehen. Das Engagement und die frischen Ideen des Teams lassen mich gespannt auf das sein, was als Nächstes kommt!";
+$review_1_role = "Trader";
+$review_2_text = "$site_name bietet eine reibungslose und intuitive Handelserfahrung. Ich konnte sofort mit dem Kauf und Handel von Krypto beginnen. Die Benutzeroberfläche ist einfach zu bedienen, und die Transaktionsgeschwindigkeiten sind hervorragend!";
+$review_2_role = "Neuer Trader";
+$review_3_text = "Ich vertraue dieser Plattform bei der Verwaltung meiner Krypto-Investitionen. Ihre Sicherheitsfunktionen geben mir Vertrauen, und ich hatte noch nie Probleme mit Auszahlungen oder Einzahlungen. Sie gehört zu den zuverlässigsten Börsen, die ich genutzt habe.";
+$review_3_role = "Profi-Trader";
+$review_4_text = "Wann immer ich Fragen hatte, war das Kundensupport-Team prompt und hilfsbereit. Sie kümmern sich wirklich um ihre Nutzer und machen jedes Handelserlebnis reibungslos und unkompliziert.";
+$review_4_role = "Erfahrener Trader";
+$review_5_text = "Als Anfänger fand ich $site_name sehr einfach zu bedienen. Was wirklich heraussticht, ist die Bandbreite an fortschrittlichen Tools für erfahrenere Trader. Es ist eine solide Option für jeden, der sein Portfolio aufbauen möchte!";
+$review_5_role = "Community-Trader";
 
-// FAQ (homepage accordion + FAQPage schema)
-$faq_label = "FAQ";
-$faq_title = "$site_name Häufig gestellte Fragen (FAQ)";
-$faq_q1 = "Was ist $site_name und wie funktioniert es?";
-$faq_a1 = "Es handelt sich um eine KI-gestützte Handelsplattform, die rund um die Uhr für Sie arbeitet. Das System analysiert die Märkte, erkennt Chancen und führt Trades automatisch aus. Sie können die KI alles erledigen lassen oder jederzeit in den manuellen Modus wechseln, um zu Ihren eigenen Bedingungen zu handeln.";
-$faq_q2 = "Wie sicher sind mein Geld und meine Daten bei $site_name?";
-$faq_a2 = "Sicherheit ist in jede Ebene der Plattform integriert. Persönliche Daten werden mit international anerkannten Verschlüsselungsstandards und fortschrittlicher Kontoauthentifizierung geschützt. Alle finanziellen Transaktionen werden ausschließlich über vertrauenswürdige, verifizierte Zahlungsanbieter abgewickelt. Ihre gesamte Trading-Aktivität — jeder Trade, jedes Signal und jede Guthabenaktualisierung — ist in Echtzeit sichtbar, sodass Sie immer genau wissen, was mit Ihrem Geld geschieht.";
-$faq_q3 = "Kann ich meine Gewinne jederzeit auszahlen?";
-$faq_a3 = "Ja. Es gibt keine Einschränkungen, wann oder wie oft Sie bei $site_name Geld auszahlen. Ihr Kontostand bleibt jederzeit unter Ihrer Kontrolle. Auszahlungen werden über dieselben vertrauenswürdigen Zahlungsanbieter abgewickelt, die auch für Einzahlungen genutzt werden, was schnelle und sichere Transaktionen gewährleistet.";
-$faq_q4 = "Gibt es versteckte Gebühren oder zusätzliche Kosten?";
-$faq_a4 = "Nein. $site_name erhebt keine Abonnementgebühren, keine Registrierungsgebühren und keine versteckten Gebühren. Der einzige Betrag, den Sie zum Start benötigen, ist eine Mindesteinzahlung von $app_price $app_currency, die direkt auf Ihr Handelskonto eingezahlt wird. Alle gängigen Zahlungsmethoden werden akzeptiert, einschließlich Kreditkarten, Banküberweisungen und PayPal.";
-$faq_q5 = "Brauche ich Vorerfahrung, um anzufangen?";
-$faq_a5 = "Überhaupt nicht. $site_name ist sowohl für absolute Anfänger als auch für erfahrene Trader konzipiert. Im vollautomatischen Modus übernimmt die KI alles für Sie, einschließlich Marktanalyse, Signalerzeugung und Trade-Ausführung. Wenn Sie lieber die Kontrolle behalten möchten, können Sie jederzeit in den manuellen Modus wechseln.";
-$faq_cta_text = "Haben Sie Fragen? Schauen Sie in unsere FAQ oder kontaktieren Sie uns.";
+// -------------------------
+// FAQ (5 Q&A, also used for FAQPage schema)
+// -------------------------
+$faq_label = "FAQs";
+$faq_title = "Häufig Gestellte Fragen";
+$faq_q1 = "Was ist $site_name?";
+$faq_a1 = "$site_name ist eine Krypto-Börse, auf der Nutzer problemlos eine breite Palette von Coins handeln können, darunter Bitcoin, Ethereum und andere beliebte Kryptowährungen.";
+$faq_q2 = "Wie Sicher Ist $site_name für den Krypto-Handel?";
+$faq_a2 = "Die Plattform bietet Sicherheit durch fortschrittliche Technologie und 1:1-Deckung der Vermögenswerte durch Proof of Reserves.";
+$faq_q3 = "Wie tätige ich eine Einzahlung?";
+$faq_a3 = "$site_name bietet mehrere Einzahlungsoptionen, darunter Krypto-Einzahlung, Fiat-Einzahlung, P2P-Handel und One-Click-Kauf.";
+$faq_q4 = "Benötige Ich Erfahrung, um $site_name zu Nutzen?";
+$faq_a4 = "Nein, Sie benötigen keinerlei Erfahrung. Die benutzerfreundliche Oberfläche der Plattform macht sie für jeden zugänglich, vom Anfänger bis zum fortgeschrittenen Trader.";
+$faq_q5 = "Gibt es versteckte Gebühren oder Kosten?";
+$faq_a5 = "Überhaupt nicht. Es gibt keine Registrierungsgebühren, Abonnementkosten oder versteckte Gebühren jeglicher Art. Sie sehen immer den genauen Transaktionsbetrag vor der Bestätigung. Die Einnahmen stammen aus Premium-Funktionen und Börsenpartnerschaften, nicht aus der Abschöpfung von Nutzergeldern.";
 
-// PRE-ABOUT CTA
-$pre_about_title = "Bereit, die Kontrolle über Ihr Trading zu übernehmen?";
-$pre_about_text = "Werden Sie noch heute Teil von $site_name und erleben Sie eine Plattform, die auf Klarheit, Sicherheit und Ergebnisse ausgelegt ist.";
-$pre_about_button = "Registrieren";
+// -------------------------
+// Bottom CTA banner
+// -------------------------
+$cta_title = "Beginnen Sie Noch Heute mit dem Handel";
+$cta_desc = "Bereit für den nächsten Schritt? Registrieren Sie sich jetzt und machen Sie den ersten Schritt in Richtung finanzieller Unabhängigkeit.";
+$cta_btn = "Registrieren";
 
-// LEAD MAGNET
-$leadmagnet_title = "Neu im Trading?";
-$leadmagnet_text1 = "Nach Ihrer Registrierung erhalten Sie unseren kostenlosen Leitfaden,";
-$leadmagnet_quote = "\"10 Fehler, die Sie beim Krypto-Handel vermeiden sollten\"";
-$leadmagnet_text2 = "vollgepackt mit klaren Tipps unserer erfahrensten Analysten, damit Sie die häufigsten Fehler vermeiden.";
-$leadmagnet_text3 = "Geben Sie einfach Ihre Daten ein, wenn Sie sich";
-$leadmagnet_link = "registrieren";
-$leadmagnet_text4 = "und wir senden ihn direkt in Ihr Postfach. Viele Investoren sind mit diesem Leitfaden gestartet und sagen, dass er ihnen echtes Vertrauen für ihre ersten Trades gegeben hat.";
-$leadmagnet_text5 = "Der Markt wartet nicht — legen Sie noch heute los!";
+// -------------------------
+// Key features table (TZ pattern, matches template_8's "info" section)
+// -------------------------
+$table_title = "Kernfunktionen der $site_name Handelsplattform";
+$table_1_label = "🤖 Plattform-Technologie";
+$table_1_val = "Fortschrittliche KI-Handels-Engine";
+$table_2_label = "💳 Finanzierungsmethoden";
+$table_2_val = "Gängige Kreditkarten, Banküberweisung, PayPal";
+$table_3_label = "📱 Plattformzugang";
+$table_3_val = "Kompatibilität mit mehreren Geräten";
+$table_4_label = "🚀 Leistungsrate";
+$table_4_val = "85% Genauigkeit";
+$table_5_label = "📊 Handelsinstrumente";
+$table_5_val = "Aktien, Forex, Rohstoffe, Edelmetalle, CFDs, Kryptowährungen und mehr…";
+$table_6_label = "✍️ Kontoeinrichtung";
+$table_6_val = "Schnell und effizient";
+$table_7_label = "📞 Kundensupport";
+$table_7_val = "24/7 professionelle Unterstützung";
 
-// CONTACT SECTION (homepage)
-$contact_label = "Kontaktieren Sie uns";
-$contact_title = "Kontaktieren Sie $site_name";
-$contact_subtitle = "Haben Sie eine Frage oder benötigen Sie Unterstützung? Wir sind für Sie da, um Sie zu beraten und zu begleiten.";
-$contact_text = "Bei $site_name sind wir überzeugt, dass Erfolg im Trading nichts mit Glück zu tun hat — er entsteht durch Präzision, Weitsicht und gute Planung.";
-$contact_form_text = "Füllen Sie einfach das untenstehende Formular aus, und ein Mitglied unseres Teams meldet sich in Kürze bei Ihnen.";
-$contact_form_button = "Nachricht senden";
+// Reviews summary card
+$summary_title = "$site_name Bewertungen";
+$summary_badge = "Vertrauenswürdig";
+$summary_desc = "Eine leistungsstarke, benutzerfreundliche Handelsplattform mit solider Automatisierung und Bildungsressourcen.";
 
-// ABOUT
-$about_label = "Über uns";
-$about_title = "Über $site_name";
-$about_intro = "$site_name bietet Ihnen nicht nur eine Handelsplattform — wir helfen Ihnen, mit Klarheit und Zuversicht zu handeln.";
-$about_text_1 = "$site_name ist die offizielle Online-Handelsplattform, die den Handel mit Kryptowährungen sowohl für Anfänger als auch für erfahrene Trader zugänglich macht.";
-$about_text_2 = "Wir kombinieren KI-gestützte Marktanalysen mit einem einfachen, transparenten Dashboard, damit Sie immer genau wissen, wo Sie stehen. Ob Sie gerade erst anfangen oder Ihren Ansatz verfeinern — $site_name gibt Ihnen die Werkzeuge an die Hand, um zu Ihren eigenen Bedingungen zu handeln.";
-$about_text_3 = "Jeder Teil der Plattform ist auf Klarheit ausgelegt: keine versteckten Gebühren, kein verwirrender Fachjargon, sondern klare Informationen, die Ihnen helfen, bessere Entscheidungen zu treffen, selbstbewusster zu handeln und die Kontrolle über Ihr Risiko zu behalten.";
-$about_text_4 = "Unsere Plattform erspart Ihnen stundenlanges Rätselraten und schützt Sie vor intransparenten Alternativen minderer Qualität. Wir sind überzeugt, dass gute Tools und ehrliche Informationen Trader befähigen, strategisch zu handeln und nachhaltig zu wachsen.";
-
-// IMAGE ALT TEXT
-$alt_hero_phone = "Mobiltelefon mit dem $site_name Handels-Dashboard";
-$alt_coin_bitcoin = "Bitcoin-Münzsymbol";
-$alt_coin_ethereum = "Ethereum-Münzsymbol";
-$alt_coin_bnb = "BNB-Münzsymbol";
-$alt_coin_solana = "Solana-Münzsymbol";
-$alt_coin_tether = "Tether-Münzsymbol";
-$alt_coin_xrp = "XRP-Münzsymbol";
-
-// ==========================================
-// CHAT-QUIZ TRANSLATIONS & CONFIGURATION
-// ==========================================
-$quiz_consultant_role = 'Onboarding-Beauftragte';
-
-$quiz_text_welcome   = "Hallo! Ich bin $quiz_consultant_name von $site_name. Gute Nachrichten — Sie sind bereits vorqualifiziert. Lassen Sie uns Ihr Konto einrichten, damit Sie mit dem Trading starten können.";
-$quiz_text_q1 = "Um die für Ihre Region geltenden Handelsbedingungen zu bestätigen, bestätigen Sie bitte Ihr Land: $country_name";
-$quiz_text_a1_yes    = "Ja, das ist mein aktueller Standort";
-$quiz_text_a1_no     = "Nein";
-
-$quiz_text_q2 = "Wählen Sie Ihre Altersgruppe, damit wir die Einrichtung Ihres Kontos entsprechend anpassen können:";
-
-$quiz_text_q3        = "Verfügen Sie über ein aktives Bankkonto oder eine Karte, um Ihr Handelskonto aufzuladen?";
-$quiz_text_a3_yes    = "Ja, ein aktives Konto ist vorhanden";
-$quiz_text_a3_no     = "Derzeit nicht verfügbar";
-
-$quiz_text_q4        = "Nennen Sie uns Ihre wichtigste Einkommensquelle, damit wir Ihnen einen zu Ihrem Budget passenden Einzahlungsplan vorschlagen können:";
-$quiz_text_a4_1      = "Erwerbseinkommen / Selbstständigkeit";
-$quiz_text_a4_2      = "Ersparnisse / Persönliche Investitionen";
-$quiz_text_a4_3      = "Andere Quellen";
-
-$quiz_text_q5 = "Letzter Schritt: Einer unserer Berater ruft Sie zwischen 11:00 und 20:00 Uhr an, um Sie durch die Einrichtung Ihres Kontos zu führen. Passt Ihnen dieser Zeitraum?";
-$quiz_text_a5_yes    = "Ja, dieser Zeitraum passt optimal";
-$quiz_text_a5_no     = "Sofortigen Prioritätskontakt anfordern";
-
-$quiz_text_loader    = "Ihr Handelsprofil wird eingerichtet...";
-$quiz_text_final_ttl = "Alles bereit! 🎉 Schließen Sie unten Ihre Registrierung ab, um Ihr Konto zu aktivieren:";
-
-$quiz_placeholder_fname = "Vorname";
-$quiz_placeholder_lname = "Nachname";
-$quiz_placeholder_email = "E-Mail-Adresse";
-$quiz_placeholder_phone = "Telefonnummer";
-$quiz_btn_submit = "Mein Konto erstellen";
-$quiz_text_typing       = "schreibt eine Antwort...";
-$quiz_text_processing   = "Eingaben werden überprüft...";
-
-// TITLE/DESCRIPTION (service pages)
-$sign_meta_title = "Registrieren | $site_name";
-$sign_meta_description = "Erstellen Sie Ihr kostenloses $site_name Konto und beginnen Sie auf einer sicheren, regulierten Plattform mit dem Handel von Kryptowährungen.";
-$product_meta_title = "Unsere Plattform | $site_name";
-$product_meta_description = "Erfahren Sie, wie $site_name KI-gestützte Analysen, Marktdaten in Echtzeit und ein transparentes Dashboard kombiniert, damit Sie mit Zuversicht handeln können.";
-$privacy_meta_title = "Datenschutzerklärung | $site_name Datensicherheit";
-$privacy_meta_description = "Erfahren Sie, wie $site_name die Privatsphäre der Nutzer nach strengen internationalen Verschlüsselungsstandards schützt.";
-$offer_meta_title = "Jetzt starten | $site_name";
-$offer_meta_description = "Registrieren Sie sich, zahlen Sie auf Ihr Konto ein und beginnen Sie in wenigen Minuten mit dem Handel von Kryptowährungen bei $site_name.";
-$faq_page_meta_title = "FAQ | $site_name Support";
-$faq_page_meta_description = "Antworten auf häufige Fragen dazu, wie $site_name funktioniert, zu den Preisen und zum Einstieg.";
-$contacts_meta_title = "Kontakt & Support | $site_name";
-$contacts_meta_description = "Kontaktieren Sie das $site_name Team bei Fragen zu Ihrem Konto oder zum Trading.";
-$conditions_meta_title = "Nutzungsbedingungen | $site_name";
-$conditions_meta_description = "Lesen Sie die offiziellen Nutzungsbedingungen für die Website und Handelsplattform von $site_name.";
-
-// MAIN PAGE
-// Header
-$mobnav_home = "Startseite";
-$mobnav_product = "Produkt";
-$mobnav_offer = "Angebot";
-$mobnav_contact = "Kontakt";
-$mobnav_faq = "FAQ";
-$mobnav_signup = "Registrieren";
-
+// -------------------------
 // Footer
-$footnav_home = "Startseite";
+// -------------------------
+$footer_tagline = "Klug handeln, schnell wachsen";
+$footer_community_label = "Community";
+$footer_copyright = "© 2026 $site_name";
 $footnav_product = "Produkt";
 $footnav_offer = "Angebot";
-$footnav_contact = "Kontakt";
+$footnav_contacts = "Kontakt";
 $footnav_faq = "FAQ";
 $footnav_privacy = "Datenschutzerklärung";
 $footnav_conditions = "Nutzungsbedingungen";
-$footnav_sitemap = "Sitemap";
-$footnav_signup = "Registrieren";
-$footnav_about = "Über uns";
-$footnav_col_pages = "Seiten";
-$footnav_col_support = "Support";
-$footnav_col_legal = "Rechtliches";
-$footnav_col_company = "Unternehmen";
-$footer_partner_text = "Ihr vertrauenswürdiger Partner für den Krypto-Handel";
-$footer_disclaimer = "$site_name übernimmt keine Verantwortung für Verluste oder Schäden, die aus dem Vertrauen auf die auf dieser Website bereitgestellten Informationen entstehen, einschließlich Lehrmaterial, Kursangaben, Charts und Analysen. Der Handel auf den Finanzmärkten ist mit erheblichen Risiken verbunden; konsultieren Sie vor einer Investition bitte einen professionellen Berater. Investieren Sie niemals mehr, als Sie sich leisten können zu verlieren. Die mit Forex, CFDs und Kryptowährungen verbundenen Risiken sind möglicherweise nicht für alle Anleger geeignet. $site_name übernimmt keine Verantwortung für Handelsverluste, die Ihnen durch die Nutzung oder das Vertrauen auf die auf dieser Website verfügbaren Daten oder Informationen entstehen.";
-$footer_copyright = "© 2026 $site_name. Alle Rechte vorbehalten.";
+$footnav_risk = "Risikowarnung";
+$footer_disclaimer = "$site_name teilt Bildungsressourcen und marktbezogenes Material, um Besuchern zu helfen, Handel, Investitionen und digitale Finanzprodukte besser zu verstehen. Die auf der Website präsentierten Informationen, wie Marktkommentare, Vermögenspreise, Charts, Leitfäden und analytische Inhalte, dienen allgemeinen Informationszwecken und stellen keine Finanz-, Anlage-, Steuer- oder Rechtsberatung dar. Obwohl angemessene Anstrengungen unternommen werden, um genaue und relevante Informationen bereitzustellen, übernimmt $site_name keine Gewährleistung für die Vollständigkeit, Genauigkeit oder Aktualität der Inhalte und kann nicht für Entscheidungen oder Verluste verantwortlich gemacht werden, die aus deren Nutzung resultieren.<br><br>Die Teilnahme an Finanzmärkten birgt inhärente Risiken. Kryptowährungen, Forex, CFDs, Aktien und andere Handelsinstrumente können erhebliche Preisschwankungen erfahren, und es können Verluste entstehen. Individuelle Umstände und Risikotoleranz variieren, daher sollten Nutzer eigene Recherchen durchführen und in Erwägung ziehen, sich von einem qualifizierten Finanzexperten beraten zu lassen, bevor sie Gelder einsetzen. Handeln Sie niemals mit Geld, dessen Verlust Sie sich nicht leisten können.";
 
-// Register Down
-$official_heading = "Registrieren Sie sich bei der offiziellen $site_name Plattform™";
-$official_description = "Erstellen Sie Ihr kostenloses Konto, um auf einer sicheren, transparenten Plattform mit dem Handel von Kryptowährungen zu beginnen.";
+// -------------------------
+// Chat widget (TZ item 10)
+// -------------------------
+$quiz_consultant_role = "Handelsberaterin";
+$quiz_text_welcome = "Hallo! Ich bin Maya, Ihre persönliche Handelsberaterin. Haben Sie ein paar Minuten Zeit, um den besten Plan für Sie zu finden?";
+$quiz_text_q1 = "Haben Sie schon einmal mit Kryptowährungen gehandelt?";
+$quiz_text_a1_yes = "Ja, ich habe Erfahrung";
+$quiz_text_a1_no = "Nein, ich bin Anfänger";
+$quiz_text_q2 = "Großartig! Wie ist Ihr Vorname, damit ich Ihren Plan personalisieren kann?";
+$quiz_text_q3 = "Was ist Ihr Hauptziel beim Handel?";
+$quiz_text_a3_yes = "Langfristigen Wohlstand aufbauen";
+$quiz_text_a3_no = "Kurzfristiges Einkommen generieren";
+$quiz_text_q4 = "Mit wie viel möchten Sie beginnen?";
+$quiz_text_a4_1 = "Unter $$app_price";
+$quiz_text_a4_2 = "$$app_price – $1000";
+$quiz_text_a4_3 = "Über $1000";
+$quiz_text_q5 = "Perfekt. Möchten Sie, dass ich jetzt ein kostenloses Konto für Sie eröffne?";
+$quiz_text_a5_yes = "Ja, lass es uns tun";
+$quiz_text_a5_no = "Nicht jetzt";
+$quiz_text_loader = "Finde Ihren besten Plan...";
+$quiz_text_final_ttl = "Alles bereit!";
+$quiz_text_processing = "Ihre Daten werden übermittelt...";
+$quiz_text_typing = "schreibt...";
+$quiz_placeholder_fname = "Vorname";
+$quiz_placeholder_lname = "Nachname";
+$quiz_placeholder_email = "E-Mail";
+$quiz_btn_submit = "Mein Kostenloses Konto Erhalten";
 
-// SIGN PAGE
-$breadcrumb_home = "Startseite";
-$breadcrumb_current = "Anmelden/Registrieren";
+// -------------------------
+// Risk Warning page (TZ item 15, verbatim text)
+// -------------------------
+$risk_meta_title = "$site_name Risikowarnung — Offenlegung des Handelsrisikos";
+$risk_meta_description = "Lesen Sie die Risikowarnung von $site_name, bevor Sie handeln: Kryptowährungsmarktrisiken, Hebelwirkung, Liquidität, Cybersicherheit und regulatorische Überlegungen.";
+$risk_title = "Risikowarnung";
+$risk_intro = "Das Verständnis der Risiken ist der erste Schritt zu selbstbewusstem Handel.";
+$risk_ai_title = "Wie Unser KI-System beim Risikomanagement Hilft:";
+$risk_ai_1_title = "Algorithmische Effizienz &amp; Emotionsloser Handel:";
+$risk_ai_1_text = "Fortschrittliche Algorithmen analysieren Marktsignale, um Trades objektiv zu optimalen Zeitpunkten auszuführen.";
+$risk_ai_2_title = "Datengesteuerte Strategien:";
+$risk_ai_2_text = "Strategien basieren auf verifizierten Marktmustern und Echtzeitanalysen anstatt auf Vermutungen.";
+$risk_ai_3_title = "Flexible Einstellungen &amp; Volle Kontrolle:";
+$risk_ai_3_text = "Passen Sie Ihre Risikoparameter jederzeit an. Verfolgen Sie alle Salden und Trades transparent auf Ihrem Dashboard, ohne versteckte Gebühren und ohne Einschränkungen bei Auszahlungen.";
+$risk_disclaimer = "<strong>Haftungsausschluss:</strong> Handel birgt stets ein Risiko. Automatisierte Systeme (einschließlich KI) garantieren keinen Gewinn, können aufgrund von Softwarefehlern oder unerwarteten Marktereignissen versagen und erfordern eine Überwachung durch den Nutzer. Vergangene Ergebnisse sind kein Indikator für zukünftige Resultate. Diese Plattform dient ausschließlich Informations- und Marketingzwecken und bietet keine Finanzberatung.";
+$risk_s1_title = "1. Allgemeine &amp; Kryptowährungsmarktrisiken";
+$risk_s1_text = "Kryptowährungen sind hochvolatile, spekulative Vermögenswerte, die rund um die Uhr mit minimaler regulatorischer Aufsicht in den meisten Rechtsräumen agieren.";
+$risk_s1_li1 = "Werte können innerhalb kurzer Zeiträume dramatisch schwanken, was möglicherweise zu einem vollständigen Verlust des investierten Kapitals führen kann.";
+$risk_s1_li2 = "Marktwerte können stark durch regulatorische Änderungen, technische Entwicklungen, Sicherheitsverletzungen oder breitere makroökonomische Ereignisse beeinflusst werden.";
+$risk_s1_li3 = "Einige Vermögenswerte können ihren gesamten Wert vollständig verlieren. Investieren Sie nur Gelder, deren Verlust Sie sich leisten können.";
+$risk_s2_title = "2. Ausführungs-, Liquiditäts- &amp; Hebelwirkungsrisiken";
+$risk_s2_li1_title = "Marktvolatilität &amp; Liquidität:";
+$risk_s2_li1_text = "Extreme Preisbewegungen (10-20%+ täglich) oder geringe Liquidität (insbesondere bei kleineren Coins) können zu Verzögerungen, Plattformausfällen und schwerwiegender Ausführungsverschiebung führen. Stop-Loss-Orders können unter extremen Bedingungen keine Verlustgrenzen garantieren.";
+$risk_s2_li2_title = "Hebelwirkungs- &amp; Margin-Risiken:";
+$risk_s2_li2_text = "Gehebelte Produkte verstärken sowohl Gewinne als auch Verluste, was bedeutet, dass Sie mehr verlieren können als Ihre ursprüngliche Einzahlung. <em>Etwa 70-80% der Konten von Kleinanlegern verlieren Geld beim Handel mit gehebelten Produkten.</em>";
+$risk_s3_title = "3. Technische, Cybersicherheits- &amp; Drittparteirisiken";
+$risk_s3_li1_title = "Technische Faktoren:";
+$risk_s3_li1_text = "Der Online-Handel birgt inhärente Risiken wie Internetausfälle, Hardware-/Softwarefehler und Nichtverfügbarkeit des Dienstes.";
+$risk_s3_li2_title = "Cybersicherheit:";
+$risk_s3_li2_text = "Kryptowährungskonten sind häufige Ziele von Phishing, Malware und Hacking. Transaktionen sind unwiderruflich; die Kompromittierung Ihrer Zugangsdaten kann zu einem dauerhaften Verlust führen.";
+$risk_s3_li3_title = "Drittanbieter-Plattformen:";
+$risk_s3_li3_text = "Diese Website kann Nutzer mit Drittanbieter-Plattformen verbinden. Wir kontrollieren, unterstützen oder garantieren nicht deren Sicherheit, Betrieb oder Solvenz. Führen Sie stets Ihre eigene Sorgfaltsprüfung durch, bevor Sie Gelder auf externen Plattformen einzahlen.";
+$risk_s4_title = "4. Regulatorische, Steuer- &amp; Schlussbestimmungen";
+$risk_s4_li1_title = "Rechtliche Compliance &amp; Steuern:";
+$risk_s4_li1_text = "Regulatorische Rahmenbedingungen variieren stark und ändern sich schnell. Nutzer sind allein dafür verantwortlich, sicherzustellen, dass ihre Handelsaktivitäten den lokalen Gesetzen entsprechen, und ihre eigenen Steuerpflichten zu erfüllen.";
+$risk_s4_li2_title = "Keine Gewinngarantien:";
+$risk_s4_li2_text = "Es gibt keinen \"sicheren\" oder risikofreien Kryptohandel. Alle angegebenen Renditezahlen oder Leistungsbeispiele sind rein hypothetisch.";
+$risk_s4_li3_title = "Eignung:";
+$risk_s4_li3_text = "Wenn Sie die Risiken nicht vollständig verstehen, auf essentielle Gelder angewiesen sind oder mit geliehenem Geld handeln, ist der Kryptohandel nicht für Sie geeignet. Konsultieren Sie im Zweifelsfall einen unabhängigen, lizenzierten Finanzberater.";
+$risk_contact = "<strong>Kontakt:</strong> Bei Fragen zu dieser Erklärung oder um eine Anfrage zu stellen, wenden Sie sich bitte über das Kontaktformular auf unserer Website an unser offizielles Kundensupport-Team.";
 
-// PRODUCT PAGE
-$breadcrumb_product = "Produkt";
-$analytics_heading = "Klüger handeln mit $site_name";
-$analytics_description = "Erhalten Sie klare Marktdaten in Echtzeit und KI-gestützte Einblicke. Treffen Sie fundierte Handelsentscheidungen mit Zuversicht.";
-$analytics_btn_signup = "Registrieren";
-$app_main_heading = "Ihr Handels-Dashboard";
-$app_feature_1_title = "Live-Marktdaten";
-$app_feature_1_text = "Preise und Charts in Echtzeit direkt griffbereit";
-$app_feature_2_title = "Portfolio-Tracking";
-$app_feature_2_text = "Umfassende Kennzahlen zu Guthaben und Performance";
-$app_feature_3_title = "Mobile Ansicht";
-$app_feature_3_text = "Optimiert für mobile Browser";
-$app_feature_4_title = "Watchlists";
-$app_feature_4_text = "Behalten Sie die von Ihnen beobachteten Vermögenswerte im Blick";
-$app_img_alt = "Mobile Oberfläche zur Verfolgung Ihres Handelsportfolios";
-$products_stats_currencies_v = "65+";
-$products_stats_currencies_l = "Verfügbare Währungen";
-$products_stats_users_v = "4 Mio.+";
-$products_stats_users_l = "Registrierte Nutzer";
-$products_stats_volume_v = "98+";
-$products_stats_volume_l = "Unterstützte Länder";
-$products_stats_countries_v = "24/7";
-$products_stats_countries_l = "Transaktionszugang";
+// -------------------------
+// Shared inner-page nav / breadcrumbs (TZ item 14: service pages)
+// -------------------------
+$bc_home = "Startseite";
+$bc_product = "Produkt";
+$bc_offer = "Angebot";
+$bc_contacts = "Kontakt";
+$bc_faq = "FAQ";
+$bc_privacy = "Datenschutzerklärung";
+$bc_conditions = "Nutzungsbedingungen";
+$bc_risk = "Risikowarnung";
+$bc_sign = "Registrieren";
+$bc_sitemap = "Sitemap";
+$bc_thanks = "Danke";
 
-// Capabilities
-$capabilities_main_title = "Das erwartet Sie";
-$capabilities_feature_1_title = "KI-gestützte Signale";
-$capabilities_feature_1_text = "Fortschrittliche Algorithmen analysieren Marktsignale und decken rund um die Uhr Chancen auf.";
-$capabilities_feature_2_title = "Schnelle Anmeldung";
-$capabilities_feature_2_text = "Registrieren Sie sich in wenigen Minuten mit einem sicheren, unkomplizierten Anmeldeprozess.";
-$capabilities_feature_3_title = "Geprüfte Sicherheit";
-$capabilities_feature_3_text = "256-Bit-SSL-Verschlüsselung, 2FA und 98 % Cold Storage schützen Ihr Geld bei jedem Schritt.";
-$capabilities_feature_4_title = "Fortlaufender Support";
-$capabilities_feature_4_text = "Erhalten Sie bei jedem Schritt Unterstützung von unserem Team — von der Registrierung bis zu Ihrem ersten Trade.";
-$capabilities_cta_heading = "Los geht's!";
-$capabilities_cta_text = "Schließen Sie sich Tausenden Tradern an, die sich für $site_name entschieden haben — für sicheren, transparenten Krypto-Handel.";
+// -------------------------
+// Product page (TZ item 14)
+// -------------------------
+$product_meta_title = "$site_name Produkt — Handelswerkzeuge &amp; Plattformfunktionen";
+$product_meta_description = "Entdecken Sie das $site_name-Produkt: Spot-Handel, Krypto-Derivate, ein Trading-Bot, Margin-Handel und mehr, alles auf einer schnellen und sicheren Plattform aufgebaut.";
+$product_h1 = "Das $site_name Handelsprodukt";
+$product_lead = "Eine Plattform, jedes Werkzeug, das ein Trader braucht: von Ihrem ersten Spot-Trade bis hin zu automatisierten Strategien und Margin-Positionen — $site_name hält das Erlebnis schnell, sicher und leicht verständlich.";
 
-// PRIVACY PAGE
-$privacy_breadcrumb_home = "Startseite";
-$privacy_breadcrumb_current = "Datenschutzerklärung";
-$privacy_page_h1 = "Datenschutzerklärung";
-$last_update = "Letzte Aktualisierung";
-$privacy_intro = "Wir respektieren Ihre Privatsphäre und verarbeiten personenbezogene Daten in vollständiger Übereinstimmung mit internationalen Standards und der europäischen DSGVO.";
-$privacy_transparency_title = "Transparenz";
-$privacy_transparency_text = "Wir legen klar dar, wie operative Telemetriedaten verarbeitet werden. Kontaktieren Sie den Support für weitere Details.";
-$privacy_usage_title = "Datennutzung";
-$privacy_usage_text = "Daten werden ausschließlich zur Bereitstellung des Zugangs, zur Absicherung von Sitzungen und zur Erfüllung von Compliance-Pflichten verwendet.";
-$privacy_rights_short_title = "Ihre Rechte";
-$privacy_rights_short_text = "Sie behalten das volle Recht, Ihre personenbezogenen Daten einzusehen, zu aktualisieren oder deren Löschung zu verlangen.";
-$privacy_security_title = "Sicherheit";
-$privacy_security_text = "Wir setzen AES-256-Verschlüsselung und Datenbankisolierung ein, um operative Telemetriedaten zu schützen.";
+// -------------------------
+// Offer page (TZ item 14)
+// -------------------------
+$offer_meta_title = "$site_name Angebot — Handel Ab $$app_price Starten";
+$offer_meta_description = "Sehen Sie, was im aktuellen $site_name-Angebot enthalten ist: eine niedrige Mindesteinzahlung von $$app_price, voller Plattformzugang und keine versteckten Gebühren.";
+$offer_h1 = "Unser Aktuelles Angebot";
+$offer_lead = "Beginnen Sie mit nur <strong>$$app_price $app_currency</strong> und schalten Sie die volle $site_name-Plattform ab dem ersten Tag frei &mdash; jedes Werkzeug, jeder Markt, keine versteckten Kosten.";
+$offer_li1 = "Mindesteinzahlung von nur $$app_price $app_currency zur Aktivierung Ihres Kontos";
+$offer_li2 = "Voller Zugang zu Spot-Handel, Derivaten, Margin und dem Trading-Bot";
+$offer_li3 = "Mehrere Finanzierungsmethoden, einschließlich Karten und Banküberweisung";
+$offer_li4 = "Keine Registrierungsgebühren, keine Abonnementkosten, keine versteckten Gebühren";
+$offer_li5 = "24/7-Kundensupport bei Ihrem Einstieg";
+$offer_note = "Einzahlungsbeträge und verfügbare Zahlungsmethoden können je nach Region variieren. Lesen Sie unsere <a class=\"link\" href=\"risk-warning.php\">Risikowarnung</a>, bevor Sie ein Konto finanzieren.";
 
-$privacy_s1_title = "1. Datenerhebung";
-$privacy_s1_text = "Wir erheben Nutzungstelemetrie (IP-Adresse, Systemparameter, Browsertyp) sowie von Nutzern übermittelte Verifizierungsdaten.";
-$privacy_s2_title = "2. Rechtsgrundlage";
-$privacy_s2_text = "Die Verarbeitung stützt sich auf die ausdrückliche Einwilligung der Nutzer, regulatorische Compliance-Vorgaben und die Erbringung des Dienstes.";
-$privacy_s3_title = "3. Datenweitergabe";
-$privacy_s3_text = "Daten werden niemals kommerzialisiert. Offenlegungen beschränken sich auf autorisierte Clearingstellen und technische Partner im Rahmen einer Vertraulichkeitsvereinbarung (NDA).";
-$privacy_s4_title = "4. Cookies";
-$privacy_s4_text = "Essenzielle Cookies werden für die Sitzungsauthentifizierung und die Optimierung der Benutzeroberfläche verwendet.";
-$privacy_google_choices = 'Verwalten Sie Ihre Tracking-Einstellungen über die <a href="http://www.google.com/settings/ads" target="_blank" rel="noopener">Google Ads-Einstellungen</a> oder nutzen Sie das <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics Opt-out-Add-on</a>. Die eigenen Datenschutzpraktiken von Google können Sie außerdem in dessen <a href="https://www.google.com/intl/en/policies/privacy/" target="_blank" rel="noopener">Datenschutzerklärung</a> nachlesen.';
-$privacy_s5_title = "5. Datenspeicherung";
-$privacy_s5_text = "Personenbezogene Daten werden ausschließlich so lange gespeichert, wie es zur Erfüllung der Anforderungen des Systemzugangs erforderlich ist.";
-$privacy_s6_title = "6. Internationale Übermittlungen";
-$privacy_s6_text = "Grenzüberschreitende Datenübertragungen erfolgen ausschließlich über verschlüsselte Kanäle und mittels Standardvertragsklauseln.";
-$privacy_s7_title = "7. Links zu Drittanbietern";
-$privacy_s7_text = "Wir übernehmen keine Verantwortung für die Datenschutzpraktiken externer Drittanbieter-Dienste, die auf unserer Website verlinkt sind.";
-$privacy_s8_title = "8. Aktualisierungen";
-$privacy_s8_text = "Diese Richtlinie kann regelmäßig angepasst werden, um System- oder Rechtsänderungen widerzuspiegeln.";
-$privacy_rights_title = "Ihre Rechte";
-$privacy_rights_text = "Nutzer haben das Recht, Zugang, Berichtigung, eingeschränkte Verarbeitung oder vollständige Löschung ihrer gespeicherten Daten zu verlangen.";
-
-// OFFER PAGE
-$offer_breadcrumb_home = "Startseite";
-$offer_breadcrumb_current = "Angebot";
-$offer_cta_h1 = "Starten Sie noch heute mit dem Trading";
-$offer_cta_text = "In wenigen Minuten startklar: registrieren, Konto aufladen und auf einer sicheren, regulierten Plattform mit dem Handel von Kryptowährungen beginnen.";
-$offer_how_it_works_title = "So funktioniert's";
-$step_1 = "Konto erstellen";
-$step_2 = "Geld einzahlen";
-$step_3 = "Mit Ihrer passenden Strategie mit dem Trading beginnen";
-$offer_official_platform_title = "Dies ist die offizielle $site_name Handelsplattform™";
-$offer_official_platform_text = "Eine vertrauenswürdige, transparente Art, Kryptowährungen zu handeln — mit Echtzeit-Einblicken und voller Kontrolle.";
-
-$faq_page_title = "FAQ";
-$faq_page_breadcrumb_home = "Startseite";
-$faq_page_breadcrumb_current = "FAQ";
-$faq_page_help_title = "Wie können wir Ihnen helfen?";
-
-// FAQ page (dedicated faq.php accordion — distinct wording from the homepage FAQ above)
-$faq_1_q = "Wie fange ich an?";
-$faq_1_a = "Erstellen Sie Ihr Konto, bestätigen Sie Ihre E-Mail-Adresse und tätigen Sie Ihre erste Einzahlung — Pläne starten bereits ab $app_price $app_currency.";
-$faq_2_q = "Sind mein Geld und meine Daten sicher? Ist $site_name zuverlässig?";
-$faq_2_a = "Ja. Ihre Daten sind durch branchenübliche 256-Bit-Verschlüsselung geschützt, und Ihr Geld ist durch Zwei-Faktor-Authentifizierung und 98 % Cold Storage abgesichert.";
-$faq_3_q = "Kann ich mein Konto jederzeit schließen oder Geld auszahlen?";
-$faq_3_a = "Ja. Es gibt keine Einschränkungen bei Auszahlungen. Kontaktieren Sie jederzeit unser Support-Team — wir helfen Ihnen bei Ihrem Konto oder bearbeiten Ihre Auszahlung umgehend.";
-$faq_4_q = "Woher weiß ich, ob diese Plattform die richtige für mich ist?";
-$faq_4_a = "$site_name wurde sowohl für absolute Anfänger als auch für erfahrene Trader entwickelt, die effizienter handeln möchten — jedes Tool auf der Plattform ist darauf ausgelegt, Sie informiert zu halten und Ihnen die Kontrolle zu geben.";
-$faq_5_q = "Brauche ich Handelserfahrung, um anzufangen?";
-$faq_5_a = "Vorkenntnisse sind nicht erforderlich. Unser KI-gestützter Modus übernimmt die Analyse für Sie, und Sie können jederzeit in den manuellen Modus wechseln, wenn Sie mehr Kontrolle möchten.";
-
-// SITE MAP PAGE
-$sitemap_meta_title = "Sitemap | $site_name";
-$sitemap_meta_description = "Verschaffen Sie sich einen vollständigen Überblick über alle Seiten der $site_name Website.";
-$sitemap_breadcrumb_home = "Startseite";
-$sitemap_breadcrumb_current = "Sitemap";
-$sitemap_h1 = "Sitemap";
-$sitemap_intro = "Nachfolgend finden Sie eine vollständige Übersicht über alle Seiten der $site_name Website.";
-
-// CONTACTS / CONDITIONS PAGE
+// -------------------------
+// Contact page (TZ item 14)
+// -------------------------
+$contacts_meta_title = "Kontaktieren Sie $site_name — Nehmen Sie Kontakt mit Unserem Team auf";
+$contacts_meta_description = "Haben Sie eine Frage zu Ihrem $site_name-Konto oder der Plattform? Erreichen Sie unser Support-Team per E-Mail oder senden Sie uns eine Nachricht, und wir melden uns bei Ihnen zurück.";
 $contacts_h1 = "Kontakt";
-$contacts_h3 = "Bei technischen Fragen oder Fragen zu Ihrem Konto wenden Sie sich bitte per E-Mail an uns";
-$conditions_breadcrumb_home = "Startseite";
-$conditions_breadcrumb_current = "Nutzungsbedingungen";
-$conditions_h1 = "Nutzungsbedingungen";
+$contacts_lead = "Fragen zu Ihrem Konto, einer Einzahlung oder wie die Plattform funktioniert? Unser Team ist hier, um zu helfen.";
+$contacts_email_label = "E-Mail";
+$contacts_hours_label = "Support-Zeiten";
+$contacts_hours_value = "24/7";
+$contacts_response_label = "Typische Antwortzeit";
+$contacts_response_value = "Innerhalb von 24 Stunden";
+$contacts_form_title = "Senden Sie Uns Eine Nachricht";
+$contacts_form_desc = "Hinterlassen Sie unten Ihre Daten, und ein Mitglied unseres Teams wird sich direkt bei Ihnen melden.";
 
-$conditions_s1_title = "1. Allgemeines";
-$conditions_s1_text = "Diese Website bietet Zugang zu einer Online-Handelsplattform für Kryptowährungen. Die Nutzung der Plattform stellt die vollständige Annahme dieser Bedingungen sowie unserer Datenschutzerklärung dar.";
-$conditions_s2_title = "2. Berechtigung";
-$conditions_s2_text = "Nutzer müssen mindestens 18 Jahre alt sein und über die volle Geschäftsfähigkeit in ihrem jeweiligen Rechtsgebiet verfügen.";
-$conditions_s3_title = "3. Eingeschränkter Zugang";
-$conditions_s3_text = "Der Zugang kann in Rechtsgebieten eingeschränkt sein, in denen lokale Vorschriften die von uns angebotene Art von Handelsdienstleistung untersagen.";
-$conditions_s4_title = "4. Untersagte Nutzung";
-$conditions_s4_text = "Nutzer dürfen das System nicht missbrauchen, keinen unbefugten Zugriff auf unsere Systeme versuchen und unsere Software nicht zurückentwickeln (Reverse Engineering).";
-$conditions_s5_title = "5. Geistiges Eigentum";
-$conditions_s5_text = "Sämtlicher Quellcode, alle Benutzeroberflächen und Markenwerte bleiben ausschließliches Eigentum des Betreiberunternehmens.";
-$conditions_s6_title = "6. Haftung";
-$conditions_s6_text = "Die Tools der Plattform werden \"wie besehen\" bereitgestellt. Wir übernehmen keine Haftung für Ergebnisse, die aus den eigenen Handelsentscheidungen eines Nutzers resultieren.";
-$conditions_s7_title = "7. Dienste von Drittanbietern";
-$conditions_s7_text = "Integrationen mit Zahlungsanbietern von Drittanbietern erfolgen über sichere Verbindungen. Für Ein- und Auszahlungen wenden sich Nutzer direkt an den von ihnen gewählten Anbieter.";
-$conditions_s8_title = "8. Externe Links";
-$conditions_s8_text = "Links zu externen Ressourcen dienen lediglich der Bequemlichkeit. Wir befürworten oder garantieren keine externe Software.";
-$conditions_s9_title = "9. Sonstiges";
-$conditions_s9_text = "Wir behalten uns das Recht vor, diese Bedingungen oder den Dienst jederzeit mit Veröffentlichung auf der Website zu ändern.";
+// -------------------------
+// FAQ page (TZ item 14 -- reuses the same Q&A as the homepage)
+// -------------------------
+$faq_meta_title = "$site_name FAQ — Häufig Gestellte Fragen";
+$faq_meta_description = "Antworten auf die häufigsten Fragen zur Erstellung eines $site_name-Kontos, zur Einzahlung, zur Plattformsicherheit und zu Gebühren.";
+$faq_page_lead = "Alles, was Sie wissen müssen, bevor Sie mit dem Handel beginnen. Sie finden Ihre Antwort nicht? <a class=\"link\" href=\"contacts.php\">Kontaktieren Sie unser Team</a>.";
 
-// ==========================================
-// RISK WARNING PAGE
-// ==========================================
-$page_title_risk_warning = "Risikohinweis | $site_name";
-$page_description_risk_warning = "Verstehen Sie die Risiken des Tradings und wie $site_name Ihnen hilft, diese sicher zu managen.";
-$risk_warning_breadcrumb_home = "Startseite";
-$risk_warning_breadcrumb_current = "Risikohinweis";
-$risk_warning_title = "Risikohinweis";
-$risk_warning_intro = "Das Verständnis der Risiken ist der erste Schritt zu selbstbewusstem Trading.";
+// -------------------------
+// Privacy Policy page (TZ item 14)
+// -------------------------
+$privacy_meta_title = "$site_name Datenschutzerklärung";
+$privacy_meta_description = "Erfahren Sie, wie $site_name Ihre persönlichen Daten auf der gesamten Website und Plattform sammelt, verwendet und schützt.";
+$privacy_sections = [
+    [
+        "title" => "1. Einführung",
+        "body" => "Diese Datenschutzerklärung erläutert, wie $site_name (\"wir\", \"uns\", \"unser\") die persönlichen Daten von Besuchern und Nutzern von $site_domain (die \"Website\") sammelt, verwendet und schützt. Durch die Nutzung der Website stimmen Sie den unten beschriebenen Praktiken zu.",
+    ],
+    [
+        "title" => "2. Informationen, die Wir Sammeln",
+        "body" => "Wir können Informationen sammeln, die Sie direkt bereitstellen, wie Ihren Namen, Ihre E-Mail-Adresse und Telefonnummer bei der Registrierung oder Übermittlung eines Formulars, sowie automatisch gesammelte Informationen, einschließlich Ihrer IP-Adresse, Geräte- und Browsertyp und angesehener Seiten auf der Website.",
+    ],
+    [
+        "title" => "3. Wie Wir Ihre Informationen Verwenden",
+        "body" => "Wir verwenden gesammelte Informationen, um Ihr Konto zu erstellen und zu verwalten, auf Anfragen zu antworten, Kundensupport zu bieten, die Website und unsere Dienste zu verbessern und, sofern zulässig, Updates zu Produkten und Angeboten zu senden. Sie können sich jederzeit von Marketingkommunikation abmelden.",
+    ],
+    [
+        "title" => "4. Cookies &amp; Tracking-Technologien",
+        "body" => "Die Website verwendet Cookies und ähnliche Technologien, um sich Ihre Präferenzen zu merken, Sie angemeldet zu halten und zu verstehen, wie Besucher unsere Seiten nutzen. Sie können Cookies über Ihre Browsereinstellungen deaktivieren, obwohl einige Funktionen dadurch möglicherweise nicht korrekt funktionieren.",
+    ],
+    [
+        "title" => "5. Weitergabe von Informationen",
+        "body" => "Wir verkaufen Ihre persönlichen Daten nicht. Wir können Informationen mit vertrauenswürdigen Dienstleistern teilen, die uns beim Betrieb der Website unterstützen (wie Hosting- oder Analyseanbieter), oder wenn dies gesetzlich vorgeschrieben ist oder zum Schutz unserer rechtlichen Ansprüche erforderlich ist.",
+    ],
+    [
+        "title" => "6. Datensicherheit",
+        "body" => "Wir wenden angemessene technische und organisatorische Maßnahmen an, um Ihre Informationen vor unbefugtem Zugriff, Änderung oder Verlust zu schützen. Keine Übertragungs- oder Speichermethode ist vollständig sicher, und wir können keine absolute Sicherheit garantieren.",
+    ],
+    [
+        "title" => "7. Ihre Rechte &amp; Wahlmöglichkeiten",
+        "body" => "Je nach Ihrem Standort haben Sie möglicherweise das Recht, auf Ihre persönlichen Daten zuzugreifen, sie zu korrigieren oder deren Löschung zu verlangen, sowie bestimmten Verwendungen zu widersprechen. Um diese Rechte auszuüben, wenden Sie sich bitte über unsere <a class=\"link\" href=\"contacts.php\">Kontaktseite</a> an uns.",
+    ],
+    [
+        "title" => "8. Datenschutz für Kinder",
+        "body" => "Die Website richtet sich nicht an Personen unter 18 Jahren, und wir sammeln nicht wissentlich persönliche Daten von Minderjährigen. Wenn Sie glauben, dass ein Minderjähriger uns persönliche Daten zur Verfügung gestellt hat, kontaktieren Sie uns bitte, damit wir diese entfernen können.",
+    ],
+    [
+        "title" => "9. Änderungen an dieser Richtlinie",
+        "body" => "Wir können diese Datenschutzerklärung von Zeit zu Zeit aktualisieren. Etwaige Änderungen werden auf dieser Seite mit einem überarbeiteten Wirksamkeitsdatum veröffentlicht. Wir empfehlen Ihnen, diese Seite regelmäßig zu überprüfen.",
+    ],
+    [
+        "title" => "10. Kontaktieren Sie Uns",
+        "body" => "Wenn Sie Fragen zu dieser Datenschutzerklärung oder zur Handhabung Ihrer Informationen haben, wenden Sie sich bitte über unsere <a class=\"link\" href=\"contacts.php\">Kontaktseite</a> an uns oder senden Sie uns eine E-Mail an info@$site_domain.",
+    ],
+];
 
-$risk_warning_ai_heading = "Wie unser KI-System beim Risikomanagement hilft:";
-$risk_warning_ai_1 = "<strong>Algorithmische Effizienz &amp; emotionsloses Trading:</strong> Fortschrittliche Algorithmen analysieren Marktsignale, um Trades objektiv zum optimalen Zeitpunkt auszuführen.";
-$risk_warning_ai_2 = "<strong>Datenbasierte Strategien:</strong> Strategien basieren auf verifizierten Marktmustern und Echtzeitanalysen statt auf Vermutungen.";
-$risk_warning_ai_3 = "<strong>Flexible Einstellungen &amp; volle Kontrolle:</strong> Passen Sie Ihre Risikoparameter jederzeit an. Verfolgen Sie alle Guthaben und Trades transparent auf Ihrem Dashboard — ohne versteckte Gebühren und ohne Einschränkungen bei Auszahlungen.";
+// -------------------------
+// Conditions of Use page (TZ item 14)
+// -------------------------
+$conditions_meta_title = "$site_name Nutzungsbedingungen";
+$conditions_meta_description = "Lesen Sie die Nutzungsbedingungen, die den Zugang zu und die Nutzung der $site_name-Website und Handelsplattform regeln.";
+$conditions_sections = [
+    [
+        "title" => "1. Annahme der Bedingungen",
+        "body" => "Durch den Zugriff auf oder die Nutzung von $site_domain (die \"Website\") stimmen Sie zu, an diese Nutzungsbedingungen gebunden zu sein. Wenn Sie mit einem Teil dieser Bedingungen nicht einverstanden sind, nutzen Sie die Website bitte nicht.",
+    ],
+    [
+        "title" => "2. Berechtigung",
+        "body" => "Sie müssen mindestens 18 Jahre alt sein und rechtlich berechtigt sein, handelsbezogene Dienstleistungen in Ihrer Rechtsordnung zu nutzen, um die Website zu verwenden. Durch die Nutzung der Website bestätigen Sie, dass Sie diese Anforderungen erfüllen.",
+    ],
+    [
+        "title" => "3. Beschreibung des Dienstes",
+        "body" => "$site_name bietet eine Online-Plattform mit Bildungsinhalten, Marktinformationen und Handelswerkzeugen. Nichts auf der Website stellt eine Finanz-, Anlage-, Steuer- oder Rechtsberatung dar, und alle bereitgestellten Informationen dienen ausschließlich allgemeinen Informationszwecken.",
+    ],
+    [
+        "title" => "4. Nutzerverantwortlichkeiten",
+        "body" => "Sie sind dafür verantwortlich, bei der Registrierung genaue Informationen bereitzustellen, die Vertraulichkeit Ihrer Kontoanmeldedaten zu wahren und für alle Aktivitäten, die unter Ihrem Konto stattfinden.",
+    ],
+    [
+        "title" => "5. Geistiges Eigentum",
+        "body" => "Alle Inhalte auf der Website, einschließlich Text, Grafiken, Logos und Software, sind Eigentum von $site_name oder seinen Lizenzgebern und durch geltende Gesetze zum geistigen Eigentum geschützt. Sie dürfen diese Inhalte nicht ohne Genehmigung reproduzieren oder verbreiten.",
+    ],
+    [
+        "title" => "6. Keine Finanzberatung",
+        "body" => "Inhalte auf der Website dienen ausschließlich Informations- und Bildungszwecken und sollten nicht als Finanzberatung ausgelegt werden. Sie sind allein für Ihre eigenen Handelsentscheidungen verantwortlich und sollten bei Bedarf einen unabhängigen Finanzberater konsultieren. Weitere Informationen finden Sie in unserer <a class=\"link\" href=\"risk-warning.php\">Risikowarnung</a>.",
+    ],
+    [
+        "title" => "7. Haftungsbeschränkung",
+        "body" => "Im maximal gesetzlich zulässigen Umfang haftet $site_name nicht für direkte, indirekte, zufällige oder Folgeschäden, die aus Ihrer Nutzung oder Unfähigkeit zur Nutzung der Website oder verlinkter Dienste Dritter entstehen.",
+    ],
+    [
+        "title" => "8. Kündigung",
+        "body" => "Wir behalten uns das Recht vor, Ihren Zugang zur Website nach eigenem Ermessen ohne Vorankündigung auszusetzen oder zu beenden, für Verhalten, das unserer Meinung nach gegen diese Nutzungsbedingungen verstößt oder anderen Nutzern oder der Website schadet.",
+    ],
+    [
+        "title" => "9. Änderungen an diesen Bedingungen",
+        "body" => "Wir können diese Nutzungsbedingungen jederzeit überarbeiten. Die fortgesetzte Nutzung der Website nach Veröffentlichung von Änderungen stellt die Annahme der aktualisierten Bedingungen dar.",
+    ],
+    [
+        "title" => "10. Kontakt",
+        "body" => "Fragen zu diesen Nutzungsbedingungen können über die <a class=\"link\" href=\"contacts.php\">Kontaktseite</a> an unser Team gerichtet oder per E-Mail an info@$site_domain gesendet werden.",
+    ],
+];
 
-$risk_warning_disclaimer = "<strong>Haftungsausschluss:</strong> Trading ist stets mit Risiken verbunden. Automatisierte Systeme (einschließlich KI) garantieren keinen Gewinn, können aufgrund von Softwarefehlern oder unerwarteten Marktereignissen versagen und erfordern eine Überwachung durch den Nutzer. Die Wertentwicklung der Vergangenheit ist kein Indikator für zukünftige Ergebnisse. Diese Plattform dient ausschließlich Informations- und Marketingzwecken und stellt keine Finanzberatung dar.";
+// -------------------------
+// Sign-up page (TZ item 14 -- hosts the primary lead form)
+// -------------------------
+$sign_meta_title = "Registrieren | $site_name — Erstellen Sie Ihr Kostenloses Konto";
+$sign_meta_description = "Erstellen Sie in wenigen Minuten Ihr kostenloses $site_name-Konto und beginnen Sie mit nur $$app_price $app_currency zu handeln.";
+$sign_h1 = "Erstellen Sie Ihr Kostenloses Konto";
+$sign_lead = "Treten Sie $site_name in wenigen Minuten bei. Füllen Sie unten Ihre Daten aus, um zu beginnen.";
 
-$risk_warning_s1_heading = "1. Allgemeine Risiken &amp; Risiken des Kryptowährungsmarktes";
-$risk_warning_s1_1 = "Kryptowährungen sind hochvolatile, spekulative Vermögenswerte, die rund um die Uhr gehandelt werden und in den meisten Rechtsgebieten nur minimaler regulatorischer Aufsicht unterliegen.";
-$risk_warning_s1_2 = "Werte können innerhalb kurzer Zeiträume drastisch schwanken, was zu einem vollständigen Verlust des investierten Kapitals führen kann.";
-$risk_warning_s1_3 = "Marktwerte können durch regulatorische Änderungen, technische Entwicklungen, Sicherheitsverletzungen oder umfassendere makroökonomische Ereignisse erheblich beeinflusst werden.";
-$risk_warning_s1_4 = "Manche Vermögenswerte können ihren gesamten Wert verlieren. Investieren Sie nur Geld, dessen Verlust Sie sich leisten können.";
+// -------------------------
+// Thank-you page (integration/send.php redirects here on success)
+// -------------------------
+$thanks_meta_title = "Danke | $site_name";
+$thanks_h1 = "Danke!";
+$thanks_text = "Ihre Daten wurden empfangen. Ein Mitglied des $site_name-Teams wird sich in Kürze mit Ihnen in Verbindung setzen, um Ihnen den Einstieg zu erleichtern.";
+$thanks_btn = "Zurück zur Startseite";
 
-$risk_warning_s2_heading = "2. Ausführungs-, Liquiditäts- &amp; Hebelrisiken";
-$risk_warning_s2_1 = "<strong>Marktvolatilität &amp; Liquidität:</strong> Extreme Preisbewegungen (10–20 %+ täglich) oder geringe Liquidität (insbesondere bei kleineren Coins) können zu Verzögerungen, Plattformausfällen und erheblicher Ausführungs-Slippage führen. Stop-Loss-Orders können unter extremen Bedingungen keine Verlustbegrenzung garantieren.";
-$risk_warning_s2_2 = "<strong>Hebel- &amp; Margin-Risiken:</strong> Gehebelte Produkte verstärken sowohl Gewinne als auch Verluste, sodass Sie mehr als Ihre ursprüngliche Einzahlung verlieren können. Etwa 70–80 % der Konten von Kleinanlegern verlieren beim Handel mit gehebelten Produkten Geld.";
+// -------------------------
+// Sitemap page (TZ item 17: human-readable sitemap)
+// -------------------------
+$sitemap_meta_title = "Sitemap | $site_name";
+$sitemap_meta_description = "Durchsuchen Sie alle Seiten der $site_name-Website, einschließlich der Handelsplattform, des Angebots, des Supports und der rechtlichen Seiten.";
+$sitemap_h1 = "Sitemap";
+$sitemap_lead = "Alle Seiten von $site_name an einem Ort.";
 
-$risk_warning_s3_heading = "3. Technische Risiken, Cybersicherheits- &amp; Drittanbieterrisiken";
-$risk_warning_s3_1 = "<strong>Technische Faktoren:</strong> Online-Trading birgt naturgemäß Risiken wie Internetverbindungsabbrüche, Hardware-/Softwarefehler und Nichtverfügbarkeit des Dienstes.";
-$risk_warning_s3_2 = "<strong>Cybersicherheit:</strong> Kryptowährungskonten sind häufige Ziele von Phishing, Malware und Hackerangriffen. Transaktionen sind unwiderruflich; die Kompromittierung Ihrer Zugangsdaten kann zu dauerhaftem Verlust führen.";
-$risk_warning_s3_3 = "<strong>Plattformen von Drittanbietern:</strong> Diese Website kann Nutzer mit Plattformen von Drittanbietern verbinden. Wir kontrollieren, befürworten oder garantieren weder deren Sicherheit noch deren Betrieb oder Zahlungsfähigkeit. Führen Sie stets Ihre eigene Sorgfaltsprüfung durch, bevor Sie Gelder auf externen Plattformen einzahlen.";
-
-$risk_warning_s4_heading = "4. Regulatorische, steuerliche &amp; abschließende Bestimmungen";
-$risk_warning_s4_1 = "<strong>Rechtliche Compliance &amp; Steuern:</strong> Regulatorische Rahmenbedingungen variieren stark und ändern sich schnell. Nutzer sind allein dafür verantwortlich, dass ihre Handelsaktivität den örtlichen Gesetzen entspricht, sowie für die Erfüllung ihrer eigenen steuerlichen Pflichten.";
-$risk_warning_s4_2 = "<strong>Keine Gewinngarantien:</strong> Es gibt keinen \"sicheren\" oder risikofreien Krypto-Handel. Etwaige Renditeangaben oder Performance-Beispiele sind rein hypothetisch.";
-$risk_warning_s4_3 = "<strong>Eignung:</strong> Wenn Sie die Risiken nicht vollständig verstehen, auf notwendige finanzielle Mittel angewiesen sind oder mit geliehenem Geld handeln, ist der Krypto-Handel nicht für Sie geeignet. Wenden Sie sich im Zweifelsfall an einen unabhängigen, lizenzierten Finanzberater.";
-
-$risk_warning_contact = "<strong>Kontakt:</strong> Bei Fragen zu dieser Erklärung oder um eine Anfrage einzureichen, wenden Sie sich bitte über das Kontaktformular auf unserer Website an unser offizielles Kundensupport-Team.";
-$footer_risk_warning = "Risikohinweis";
-?>
